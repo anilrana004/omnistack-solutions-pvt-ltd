@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Star, Quote, X, MoreVertical, Pencil, Trash2 } from "lucide-react";
+import { Star, Quote, X } from "lucide-react";
 
 interface Testimonial {
   id: string;
@@ -25,11 +25,6 @@ export default function TestimonialSection() {
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [openMenuId, setOpenMenuId] = useState<string | null>(null);
-  const [editingTestimonial, setEditingTestimonial] = useState<Testimonial | null>(null);
-  const [editRating, setEditRating] = useState<number>(0);
-  const [editContent, setEditContent] = useState<string>("");
-  const [deleteTarget, setDeleteTarget] = useState<Testimonial | null>(null);
   const [formData, setFormData] = useState<FeedbackFormData>({
     name: "",
     role: "",
@@ -47,24 +42,6 @@ export default function TestimonialSection() {
     fetchTestimonials();
   }, []);
 
-  // Close menus on outside click / escape
-  useEffect(() => {
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        setOpenMenuId(null);
-        setEditingTestimonial(null);
-        setDeleteTarget(null);
-      }
-    };
-    const onPointerDown = () => setOpenMenuId(null);
-    window.addEventListener("keydown", onKeyDown);
-    window.addEventListener("pointerdown", onPointerDown);
-    return () => {
-      window.removeEventListener("keydown", onKeyDown);
-      window.removeEventListener("pointerdown", onPointerDown);
-    };
-  }, []);
-
   const fetchTestimonials = async () => {
     try {
       const response = await fetch("/api/feedback");
@@ -78,8 +55,8 @@ export default function TestimonialSection() {
           company: t.company,
           content: t.message,
           rating: t.rating,
-          // Basic permission flag for now (replace with real auth later)
-          isOwner: true,
+          // Read-only: no edit/delete functionality
+          isOwner: false,
         }));
         setTestimonials(mapped);
       }
@@ -159,7 +136,8 @@ export default function TestimonialSection() {
           company: data.feedback.company,
           content: data.feedback.message,
           rating: data.feedback.rating,
-          isOwner: true,
+          // Read-only: no edit/delete functionality
+          isOwner: false,
         };
 
         // Prepend to testimonials list (appears at top)
@@ -214,35 +192,6 @@ export default function TestimonialSection() {
     }
   };
 
-  const handleOpenEdit = (t: Testimonial) => {
-    setOpenMenuId(null);
-    setEditingTestimonial(t);
-    setEditRating(t.rating);
-    setEditContent(t.content);
-  };
-
-  const handleSaveEdit = () => {
-    if (!editingTestimonial) return;
-    const nextRating = Math.min(5, Math.max(1, editRating));
-    const nextContent = editContent.trim();
-    if (!nextContent) return;
-
-    setTestimonials((prev) =>
-      prev.map((t) =>
-        t.id === editingTestimonial.id
-          ? { ...t, rating: nextRating, content: nextContent }
-          : t
-      )
-    );
-    setEditingTestimonial(null);
-  };
-
-  const handleConfirmDelete = () => {
-    if (!deleteTarget) return;
-    setTestimonials((prev) => prev.filter((t) => t.id !== deleteTarget.id));
-    setDeleteTarget(null);
-    setOpenMenuId(null);
-  };
 
   // Show loading state
   if (loading) {
@@ -305,62 +254,6 @@ export default function TestimonialSection() {
                   <Quote className="w-12 h-12 text-white" />
                 </div>
 
-                {/* Owner actions */}
-                {testimonial.isOwner ? (
-                  <div
-                    className="absolute top-4 right-4 z-10"
-                    onPointerDown={(e) => e.stopPropagation()}
-                  >
-                    <button
-                      type="button"
-                      aria-label="Open testimonial menu"
-                      onClick={() =>
-                        setOpenMenuId((prev) =>
-                          prev === testimonial.id ? null : testimonial.id
-                        )
-                      }
-                      className="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-white/15 backdrop-blur border border-white/25 transition-colors [@media(hover:hover)]:hover:bg-white/20"
-                    >
-                      <MoreVertical className="w-5 h-5 text-white/90" />
-                    </button>
-
-                    <div
-                      className={[
-                        // Open upward so it doesn't overlap feedback text
-                        "absolute right-0 bottom-full mb-2 w-44",
-                        "rounded-xl border border-white/20 bg-black/40 backdrop-blur shadow-lg overflow-hidden",
-                        "transition-all duration-150 origin-bottom-right",
-                        openMenuId === testimonial.id
-                          ? "opacity-100 scale-100 translate-y-0 pointer-events-auto"
-                          : "opacity-0 scale-95 -translate-y-1 pointer-events-none",
-                      ].join(" ")}
-                      role="menu"
-                      aria-label="Testimonial actions"
-                    >
-                      <button
-                        type="button"
-                        role="menuitem"
-                        onClick={() => handleOpenEdit(testimonial)}
-                        className="w-full px-4 py-2.5 text-left text-sm text-white/90 transition-colors inline-flex items-center gap-2 [@media(hover:hover)]:hover:bg-white/10"
-                      >
-                        <Pencil className="w-4 h-4 text-green-300" />
-                        Edit Feedback
-                      </button>
-                      <button
-                        type="button"
-                        role="menuitem"
-                        onClick={() => {
-                          setOpenMenuId(null);
-                          setDeleteTarget(testimonial);
-                        }}
-                        className="w-full px-4 py-2.5 text-left text-sm text-red-200 transition-colors inline-flex items-center gap-2 [@media(hover:hover)]:hover:bg-white/10"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                        Delete Feedback
-                      </button>
-                    </div>
-                  </div>
-                ) : null}
 
                 <div className="flex items-center mb-4">
                   {[...Array(5)].map((_, i) => {
@@ -428,135 +321,6 @@ export default function TestimonialSection() {
         </div>
       </section>
 
-      {/* Edit Feedback Modal */}
-      {editingTestimonial ? (
-        <div
-          className="fixed inset-0 z-[2100] flex items-center justify-center p-4 bg-black/30 backdrop-blur-sm"
-          onClick={() => setEditingTestimonial(null)}
-        >
-          <div
-            className="bg-white rounded-2xl shadow-xl max-w-lg w-full max-h-[85vh] overflow-hidden"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="sticky top-0 z-10 bg-white/95 backdrop-blur flex items-center justify-between p-6 border-b border-gray-100">
-              <h3 className="text-lg font-medium text-olive-900">Edit Feedback</h3>
-              <button
-                type="button"
-                onClick={() => setEditingTestimonial(null)}
-                className="p-1 text-gray-400 hover:text-gray-600 transition-colors"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            <div className="p-6 overflow-y-auto max-h-[60vh] md:max-h-[65vh] pr-2">
-              <div className="space-y-5">
-                <div>
-                  <p className="text-sm font-medium text-olive-900 mb-2">
-                    Rating
-                  </p>
-                  <div className="flex items-center gap-1">
-                    {[...Array(5)].map((_, i) => {
-                      const value = i + 1;
-                      const filled = value <= editRating;
-                      return (
-                        <button
-                          key={value}
-                          type="button"
-                          aria-label={`Set rating to ${value}`}
-                          onClick={() => setEditRating(value)}
-                          className="p-1"
-                        >
-                          <Star
-                            className={`w-6 h-6 ${
-                              filled
-                                ? "fill-yellow-400 text-yellow-400"
-                                : "fill-transparent text-gray-200"
-                            }`}
-                          />
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-olive-900 mb-2">
-                    Feedback
-                  </label>
-                  <textarea
-                    value={editContent}
-                    onChange={(e) => setEditContent(e.target.value)}
-                    rows={5}
-                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 outline-none transition-all resize-none"
-                  />
-                  {!editContent.trim() ? (
-                    <p className="mt-1 text-xs text-red-500">
-                      Feedback text is required.
-                    </p>
-                  ) : null}
-                </div>
-              </div>
-            </div>
-
-            <div className="sticky bottom-0 z-10 bg-white/95 backdrop-blur p-6 border-t border-gray-100 flex gap-3 justify-end">
-              <button
-                type="button"
-                onClick={() => setEditingTestimonial(null)}
-                className="px-5 py-2.5 rounded-lg border border-gray-300 text-gray-700 font-semibold hover:bg-gray-50 transition-colors"
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                onClick={handleSaveEdit}
-                disabled={!editContent.trim() || editRating < 1}
-                className="px-5 py-2.5 rounded-lg font-semibold text-white bg-gradient-to-r from-olive-600 via-olive-700 to-olive-800 hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                Save Changes
-              </button>
-            </div>
-          </div>
-        </div>
-      ) : null}
-
-      {/* Delete confirmation */}
-      {deleteTarget ? (
-        <div
-          className="fixed inset-0 z-[2200] flex items-center justify-center p-4 bg-black/30 backdrop-blur-sm"
-          onClick={() => setDeleteTarget(null)}
-        >
-          <div
-            className="bg-white rounded-2xl shadow-xl max-w-md w-full overflow-hidden"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="p-6 border-b border-gray-100">
-              <h3 className="text-lg font-semibold text-olive-900">
-                Delete Feedback
-              </h3>
-              <p className="mt-2 text-sm text-gray-600">
-                Are you sure you want to delete this feedback?
-              </p>
-            </div>
-            <div className="p-6 flex gap-3 justify-end">
-              <button
-                type="button"
-                onClick={() => setDeleteTarget(null)}
-                className="px-5 py-2.5 rounded-lg border border-gray-300 text-gray-700 font-semibold hover:bg-gray-50 transition-colors"
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                onClick={handleConfirmDelete}
-                className="px-5 py-2.5 rounded-lg font-semibold text-white bg-red-600 hover:bg-red-700 transition-colors"
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-        </div>
-      ) : null}
 
       {/* Feedback Modal */}
       {isModalOpen && (
