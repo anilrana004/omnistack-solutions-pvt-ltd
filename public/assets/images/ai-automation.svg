@@ -1,0 +1,101 @@
+<!--
+AI prompt (source-of-truth for regeneration):
+Minimal AI automation control center UI, clean SaaS dashboard, soft olive gradient background, glassmorphism cards, workflow nodes connected by lines, abstract charts, no text, no people, realistic product screenshot style, 16:9.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-label="AI automation platform preview">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#081f19"/>
+      <stop offset="0.55" stop-color="#143b2e"/>
+      <stop offset="1" stop-color="#071612"/>
+    </linearGradient>
+    <linearGradient id="glow" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#a6f4a8" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#8fdc93" stop-opacity="0.03"/>
+    </linearGradient>
+    <filter id="blur" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="70"/>
+    </filter>
+    <filter id="glass" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur in="BackgroundImage" stdDeviation="14" result="bgblur"/>
+      <feComposite in="bgblur" in2="SourceGraphic" operator="in" result="masked"/>
+      <feMerge>
+        <feMergeNode in="masked"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <circle cx="420" cy="240" r="320" fill="url(#glow)" filter="url(#blur)"/>
+  <circle cx="1220" cy="680" r="340" fill="url(#glow)" filter="url(#blur)"/>
+
+  <!-- Main panel -->
+  <g filter="url(#glass)">
+    <rect x="140" y="120" width="1320" height="700" rx="28" fill="#ffffff" fill-opacity="0.08" stroke="#ffffff" stroke-opacity="0.14"/>
+    <rect x="140" y="120" width="1320" height="56" rx="28" fill="#ffffff" fill-opacity="0.10"/>
+    <circle cx="178" cy="148" r="7" fill="#ffffff" fill-opacity="0.35"/>
+    <circle cx="202" cy="148" r="7" fill="#ffffff" fill-opacity="0.28"/>
+    <circle cx="226" cy="148" r="7" fill="#ffffff" fill-opacity="0.22"/>
+  </g>
+
+  <!-- Workflow canvas -->
+  <g filter="url(#glass)">
+    <rect x="180" y="206" width="980" height="574" rx="24" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+    <!-- connection lines -->
+    <g stroke="#a6f4a8" stroke-opacity="0.35" stroke-width="4" fill="none" stroke-linecap="round">
+      <path d="M340 380 C440 320, 520 320, 620 380"/>
+      <path d="M620 380 C720 440, 760 520, 820 580"/>
+      <path d="M620 380 C740 320, 860 300, 980 340"/>
+      <path d="M980 340 C1080 380, 1120 460, 1100 560"/>
+    </g>
+
+    <!-- nodes -->
+    <g>
+      <rect x="260" y="320" width="160" height="120" rx="18" fill="#ffffff" fill-opacity="0.10" stroke="#ffffff" stroke-opacity="0.16"/>
+      <circle cx="300" cy="360" r="10" fill="#a6f4a8" fill-opacity="0.7"/>
+      <rect x="320" y="352" width="76" height="10" rx="5" fill="#ffffff" fill-opacity="0.22"/>
+      <rect x="300" y="382" width="92" height="10" rx="5" fill="#ffffff" fill-opacity="0.16"/>
+
+      <rect x="540" y="320" width="160" height="120" rx="18" fill="#ffffff" fill-opacity="0.10" stroke="#ffffff" stroke-opacity="0.16"/>
+      <circle cx="580" cy="360" r="10" fill="#a6f4a8" fill-opacity="0.6"/>
+      <rect x="600" y="352" width="76" height="10" rx="5" fill="#ffffff" fill-opacity="0.22"/>
+      <rect x="580" y="382" width="92" height="10" rx="5" fill="#ffffff" fill-opacity="0.16"/>
+
+      <rect x="900" y="280" width="200" height="140" rx="20" fill="#ffffff" fill-opacity="0.10" stroke="#ffffff" stroke-opacity="0.16"/>
+      <circle cx="940" cy="330" r="10" fill="#a6f4a8" fill-opacity="0.55"/>
+      <rect x="960" y="322" width="96" height="10" rx="5" fill="#ffffff" fill-opacity="0.22"/>
+      <rect x="940" y="352" width="120" height="10" rx="5" fill="#ffffff" fill-opacity="0.16"/>
+      <!-- mini bars -->
+      <g transform="translate(940 380)">
+        <rect x="0" y="24" width="10" height="26" rx="4" fill="#a6f4a8" fill-opacity="0.45"/>
+        <rect x="16" y="14" width="10" height="36" rx="4" fill="#a6f4a8" fill-opacity="0.65"/>
+        <rect x="32" y="30" width="10" height="20" rx="4" fill="#a6f4a8" fill-opacity="0.35"/>
+        <rect x="48" y="8" width="10" height="42" rx="4" fill="#a6f4a8" fill-opacity="0.75"/>
+      </g>
+
+      <rect x="740" y="540" width="200" height="160" rx="22" fill="#ffffff" fill-opacity="0.10" stroke="#ffffff" stroke-opacity="0.16"/>
+      <circle cx="780" cy="590" r="10" fill="#a6f4a8" fill-opacity="0.55"/>
+      <rect x="800" y="582" width="108" height="10" rx="5" fill="#ffffff" fill-opacity="0.22"/>
+      <rect x="780" y="612" width="140" height="10" rx="5" fill="#ffffff" fill-opacity="0.16"/>
+      <!-- waveform -->
+      <path d="M770 660 C790 640, 810 690, 830 670 C850 650, 870 700, 890 680"
+            stroke="#a6f4a8" stroke-width="5" stroke-linecap="round" stroke-opacity="0.75" fill="none"/>
+    </g>
+  </g>
+
+  <!-- Right insights panel -->
+  <g filter="url(#glass)">
+    <rect x="1180" y="206" width="260" height="574" rx="24" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+    <rect x="1208" y="236" width="150" height="14" rx="7" fill="#ffffff" fill-opacity="0.20"/>
+    <rect x="1208" y="270" width="210" height="10" rx="5" fill="#ffffff" fill-opacity="0.12"/>
+    <rect x="1208" y="296" width="190" height="10" rx="5" fill="#ffffff" fill-opacity="0.10"/>
+    <rect x="1208" y="360" width="220" height="120" rx="18" fill="#ffffff" fill-opacity="0.10"/>
+    <circle cx="1260" cy="420" r="34" fill="#a6f4a8" fill-opacity="0.18"/>
+    <path d="M1244 420 C1252 404, 1268 404, 1276 420 C1268 436, 1252 436, 1244 420Z"
+          fill="#a6f4a8" fill-opacity="0.55"/>
+    <rect x="1208" y="510" width="220" height="14" rx="7" fill="#ffffff" fill-opacity="0.18"/>
+    <rect x="1208" y="540" width="180" height="10" rx="5" fill="#ffffff" fill-opacity="0.12"/>
+    <rect x="1208" y="566" width="200" height="10" rx="5" fill="#ffffff" fill-opacity="0.10"/>
+  </g>
+</svg>

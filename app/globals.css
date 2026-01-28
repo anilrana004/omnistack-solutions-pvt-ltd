@@ -1,0 +1,250 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-inter: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    @apply bg-white text-gray-900 antialiased;
+  }
+
+  /* Apple-style form input focus states */
+  input:focus,
+  textarea:focus,
+  select:focus {
+    outline: none;
+  }
+
+  input:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible {
+    outline: none;
+  }
+}
+
+@layer components {
+  .gradient-accent {
+    @apply bg-gradient-to-r from-olive-600 via-olive-700 to-olive-800;
+  }
+  
+  .gradient-accent-text {
+    @apply bg-gradient-to-r from-olive-600 via-olive-700 to-olive-800 bg-clip-text text-transparent;
+  }
+  
+  .btn-primary {
+    @apply px-6 py-3 rounded-lg font-semibold text-white gradient-accent hover:shadow-lg hover:scale-105 transition-all duration-300;
+  }
+  
+  .btn-secondary {
+    @apply px-6 py-3 rounded-lg font-semibold text-olive-900 bg-white border-2 border-olive-900 hover:bg-olive-900 hover:text-white transition-all duration-300;
+  }
+  
+  .card {
+    @apply bg-white rounded-xl p-6 shadow-md;
+  }
+  
+  .card-clickable {
+    @apply border border-gray-200 bg-white overflow-hidden transition-all duration-200 ease-in-out cursor-pointer;
+  }
+  
+  .card-clickable:hover {
+    @apply -translate-y-[2px] shadow-lg;
+    border-color: rgba(0, 0, 0, 0.08);
+  }
+  
+  .card-clickable:focus-visible {
+    @apply outline-none ring-2 ring-olive-500 ring-offset-2;
+  }
+}
+
+@layer utilities {
+  /**
+   * OmniStack brand gradient overlay for sections with background images.
+   * Bottom layer: background image on the section
+   * Middle layer: this overlay (::before)
+   * Top layer: section content
+   */
+  .omni-bg-overlay {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .omni-bg-overlay::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    /* Mobile-first: slightly softer green */
+    background: linear-gradient(
+      to bottom,
+      rgba(34, 197, 94, 0.10),
+      rgba(22, 163, 74, 0.18),
+      rgba(0, 0, 0, 0.45)
+    );
+  }
+
+  @media (min-width: 768px) {
+    .omni-bg-overlay::before {
+      /* Desktop: slightly richer brand depth */
+      background: linear-gradient(
+        to bottom,
+        rgba(34, 197, 94, 0.14),
+        rgba(22, 163, 74, 0.25),
+        rgba(0, 0, 0, 0.45)
+      );
+    }
+  }
+
+  /**
+   * OmniStack glassmorphism surface (frosted glass).
+   * Use on top of background images/gradients.
+   */
+  .omni-glass {
+    background: rgba(255, 255, 255, 0.18);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+  }
+
+  /* Mobile: slightly stronger background + reduced blur */
+  @media (max-width: 767.98px) {
+    .omni-glass {
+      background: rgba(255, 255, 255, 0.22);
+      -webkit-backdrop-filter: blur(8px);
+      backdrop-filter: blur(8px);
+    }
+  }
+
+  /* Card variant: includes desktop-only hover behavior */
+  .omni-glass-card {
+    background: rgba(255, 255, 255, 0.18);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+    transition:
+      background-color 300ms ease,
+      transform 300ms ease,
+      box-shadow 300ms ease,
+      border-color 300ms ease;
+    will-change: transform;
+  }
+
+  @media (max-width: 767.98px) {
+    .omni-glass-card {
+      background: rgba(255, 255, 255, 0.22);
+      -webkit-backdrop-filter: blur(8px);
+      backdrop-filter: blur(8px);
+    }
+  }
+
+  @media (hover: hover) and (min-width: 768px) {
+    .omni-glass-card:hover {
+      background: rgba(255, 255, 255, 0.24);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.28);
+      border-color: rgba(255, 255, 255, 0.35);
+    }
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes gradient {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient 3s ease infinite;
+}
+
+.delay-1000 {
+  animation-delay: 1s;
+}
+
+/* Apple-style subtle floating background animations */
+@keyframes float-slow {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.25;
+  }
+  33% {
+    transform: translate(30px, -40px) scale(1.05);
+    opacity: 0.3;
+  }
+  66% {
+    transform: translate(-20px, 30px) scale(0.95);
+    opacity: 0.2;
+  }
+}
+
+@keyframes float-medium {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.2;
+  }
+  50% {
+    transform: translate(-40px, 50px) scale(1.1);
+    opacity: 0.25;
+  }
+}
+
+@keyframes float-rotate {
+  0%, 100% {
+    transform: translate(-50%, -50%) rotate(0deg) scale(1);
+    opacity: 0.15;
+  }
+  25% {
+    transform: translate(-45%, -55%) rotate(5deg) scale(1.05);
+    opacity: 0.2;
+  }
+  50% {
+    transform: translate(-55%, -45%) rotate(-5deg) scale(0.95);
+    opacity: 0.15;
+  }
+  75% {
+    transform: translate(-50%, -50%) rotate(3deg) scale(1.02);
+    opacity: 0.18;
+  }
+}
+
+.animate-float-slow {
+  animation: float-slow 30s ease-in-out infinite;
+}
+
+.animate-float-medium {
+  animation: float-medium 35s ease-in-out infinite;
+  animation-delay: -10s;
+}
+
+.animate-float-rotate {
+  animation: float-rotate 40s ease-in-out infinite;
+  animation-delay: -15s;
+}
+
+

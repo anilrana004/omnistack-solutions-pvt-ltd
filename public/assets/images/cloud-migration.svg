@@ -1,0 +1,104 @@
+<!--
+AI prompt (source-of-truth for regeneration):
+Enterprise cloud migration platform UI, clean minimal SaaS dashboard, soft olive gradient background, glass cards, abstract cloud/network nodes and status panels, no text, no people, realistic product screenshot style, 16:9.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-label="Cloud migration platform preview">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#08221b"/>
+      <stop offset="0.55" stop-color="#13382b"/>
+      <stop offset="1" stop-color="#051510"/>
+    </linearGradient>
+    <linearGradient id="glow" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#a6f4a8" stop-opacity="0.24"/>
+      <stop offset="1" stop-color="#8fdc93" stop-opacity="0.03"/>
+    </linearGradient>
+    <filter id="blur" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="70"/>
+    </filter>
+    <filter id="glass" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur in="BackgroundImage" stdDeviation="14" result="bgblur"/>
+      <feComposite in="bgblur" in2="SourceGraphic" operator="in" result="masked"/>
+      <feMerge>
+        <feMergeNode in="masked"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <circle cx="380" cy="260" r="320" fill="url(#glow)" filter="url(#blur)"/>
+  <circle cx="1220" cy="660" r="360" fill="url(#glow)" filter="url(#blur)"/>
+
+  <g filter="url(#glass)">
+    <rect x="140" y="120" width="1320" height="700" rx="28" fill="#ffffff" fill-opacity="0.08" stroke="#ffffff" stroke-opacity="0.14"/>
+    <rect x="140" y="120" width="1320" height="56" rx="28" fill="#ffffff" fill-opacity="0.10"/>
+    <circle cx="178" cy="148" r="7" fill="#ffffff" fill-opacity="0.35"/>
+    <circle cx="202" cy="148" r="7" fill="#ffffff" fill-opacity="0.28"/>
+    <circle cx="226" cy="148" r="7" fill="#ffffff" fill-opacity="0.22"/>
+  </g>
+
+  <!-- Migration map -->
+  <g filter="url(#glass)">
+    <rect x="180" y="206" width="860" height="574" rx="24" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+
+    <!-- abstract network -->
+    <g stroke="#a6f4a8" stroke-opacity="0.30" stroke-width="4" fill="none" stroke-linecap="round">
+      <path d="M340 360 C450 300, 560 300, 670 360"/>
+      <path d="M670 360 C780 420, 850 500, 900 610"/>
+      <path d="M670 360 C780 300, 890 280, 990 320"/>
+      <path d="M340 520 C460 560, 560 560, 670 520"/>
+    </g>
+
+    <!-- source cluster -->
+    <g>
+      <rect x="250" y="300" width="220" height="170" rx="22" fill="#ffffff" fill-opacity="0.10" stroke="#ffffff" stroke-opacity="0.14"/>
+      <circle cx="290" cy="340" r="10" fill="#a6f4a8" fill-opacity="0.55"/>
+      <rect x="310" y="332" width="110" height="12" rx="6" fill="#ffffff" fill-opacity="0.20"/>
+      <rect x="290" y="368" width="160" height="10" rx="5" fill="#ffffff" fill-opacity="0.12"/>
+      <rect x="290" y="392" width="140" height="10" rx="5" fill="#ffffff" fill-opacity="0.10"/>
+      <rect x="290" y="428" width="120" height="14" rx="7" fill="#a6f4a8" fill-opacity="0.22"/>
+    </g>
+
+    <!-- destination cloud -->
+    <g>
+      <rect x="820" y="260" width="180" height="140" rx="22" fill="#ffffff" fill-opacity="0.10" stroke="#ffffff" stroke-opacity="0.14"/>
+      <path d="M880 332 C880 314, 896 300, 916 300 C932 300, 946 310, 950 324 C966 326, 978 340, 978 356 C978 374, 964 388, 946 388 H888 C870 388, 856 374, 856 356 C856 342, 866 330, 880 332Z"
+            fill="#a6f4a8" fill-opacity="0.22"/>
+      <rect x="850" y="410" width="230" height="170" rx="22" fill="#ffffff" fill-opacity="0.10" stroke="#ffffff" stroke-opacity="0.14"/>
+      <circle cx="890" cy="450" r="10" fill="#a6f4a8" fill-opacity="0.55"/>
+      <rect x="910" y="442" width="120" height="12" rx="6" fill="#ffffff" fill-opacity="0.20"/>
+      <rect x="890" y="478" width="160" height="10" rx="5" fill="#ffffff" fill-opacity="0.12"/>
+      <rect x="890" y="502" width="140" height="10" rx="5" fill="#ffffff" fill-opacity="0.10"/>
+      <!-- progress -->
+      <rect x="890" y="540" width="160" height="10" rx="5" fill="#ffffff" fill-opacity="0.10"/>
+      <rect x="890" y="540" width="110" height="10" rx="5" fill="#a6f4a8" fill-opacity="0.55"/>
+    </g>
+  </g>
+
+  <!-- Right status panel -->
+  <g filter="url(#glass)">
+    <rect x="1060" y="206" width="400" height="574" rx="24" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12"/>
+    <rect x="1090" y="236" width="200" height="14" rx="7" fill="#ffffff" fill-opacity="0.18"/>
+
+    <rect x="1090" y="278" width="340" height="120" rx="20" fill="#ffffff" fill-opacity="0.10"/>
+    <rect x="1120" y="310" width="200" height="12" rx="6" fill="#ffffff" fill-opacity="0.18"/>
+    <rect x="1120" y="340" width="290" height="10" rx="5" fill="#ffffff" fill-opacity="0.12"/>
+    <rect x="1120" y="364" width="260" height="10" rx="5" fill="#ffffff" fill-opacity="0.10"/>
+
+    <rect x="1090" y="420" width="340" height="160" rx="22" fill="#ffffff" fill-opacity="0.10"/>
+    <g transform="translate(1120 454)">
+      <rect x="0" y="54" width="16" height="48" rx="6" fill="#a6f4a8" fill-opacity="0.40"/>
+      <rect x="26" y="34" width="16" height="68" rx="6" fill="#a6f4a8" fill-opacity="0.60"/>
+      <rect x="52" y="72" width="16" height="30" rx="6" fill="#a6f4a8" fill-opacity="0.30"/>
+      <rect x="78" y="22" width="16" height="80" rx="6" fill="#a6f4a8" fill-opacity="0.72"/>
+      <rect x="104" y="46" width="16" height="56" rx="6" fill="#a6f4a8" fill-opacity="0.50"/>
+    </g>
+
+    <rect x="1090" y="610" width="340" height="140" rx="22" fill="#ffffff" fill-opacity="0.10"/>
+    <circle cx="1130" cy="660" r="16" fill="#a6f4a8" fill-opacity="0.35"/>
+    <rect x="1160" y="652" width="190" height="12" rx="6" fill="#ffffff" fill-opacity="0.18"/>
+    <rect x="1160" y="680" width="260" height="10" rx="5" fill="#ffffff" fill-opacity="0.12"/>
+    <rect x="1160" y="704" width="230" height="10" rx="5" fill="#ffffff" fill-opacity="0.10"/>
+  </g>
+</svg>
