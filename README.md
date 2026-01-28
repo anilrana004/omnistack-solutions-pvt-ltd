@@ -2,12 +2,15 @@
 
 A production-ready, fully responsive marketing website built with Next.js, TypeScript, and Tailwind CSS.
 
+OmniStack Solutions Pvt. Ltd. builds scalable websites, applications, AI systems, and cloud solutions for modern businesses. We focus on clean architecture, performance, and long-term growth.
+
 ## Tech Stack
 
 - **Next.js 14** (App Router)
 - **TypeScript**
 - **Tailwind CSS**
 - **Lucide React** (Icons)
+- **Sanity CMS** (Content Management)
 
 ## Getting Started
 
@@ -122,6 +125,8 @@ npm start
 - ✅ SEO-friendly structure
 - ✅ TypeScript for type safety
 - ✅ Reusable component architecture
+- ✅ Sanity CMS integration
+- ✅ Preview mode for content editing
 
 ## Pages
 
@@ -146,9 +151,3 @@ All content is editable in the respective component files in the `components/` a
 ## License
 
 © 2024 OmniStack Solutions. All rights reserved.
-
-
-
-
-
-
