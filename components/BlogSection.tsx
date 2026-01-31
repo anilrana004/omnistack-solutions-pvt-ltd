@@ -33,19 +33,19 @@ export default async function BlogSection() {
   return (
     <section
       className={[
-        "omni-bg-overlay py-20",
+        "omni-bg-overlay py-12 sm:py-16 lg:py-20",
         "bg-[url('/images/backgrounds/blogs-news-bg.jpg.jpg')] bg-cover bg-center bg-no-repeat",
       ].join(" ")}
     >
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-4xl md:text-5xl font-bold text-center mb-4 text-white">
+        <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-3 sm:mb-4 text-white">
           Blog & News
         </h2>
-        <p className="text-center text-white/80 mb-12 max-w-2xl mx-auto">
+        <p className="text-center text-white/80 mb-8 sm:mb-10 lg:mb-12 max-w-2xl mx-auto text-sm sm:text-base px-2 sm:px-0">
           Insights on technology, development practices, and industry trends
         </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mb-8 sm:mb-10 lg:mb-12 w-full">
           {featured.map((post) => (
             <BlogCard
               key={post._id}

@@ -40,7 +40,7 @@ export default function BlogCard({
     <Link
       href={href}
       className={[
-        "card-clickable block rounded-xl group overflow-hidden",
+        "card-clickable block rounded-xl group overflow-hidden w-full min-w-0",
         variant === "glass"
           ? "omni-glass-card"
           : [
@@ -54,18 +54,18 @@ export default function BlogCard({
         className,
       ].join(" ")}
     >
-      <div className="relative w-full aspect-[16/9] bg-gray-100 overflow-hidden">
+      <div className="relative w-full aspect-[16/9] bg-gray-100 overflow-hidden min-h-0">
         <Image
           src={imageUrl || blogFallbackCover.src}
           alt={imageUrl ? title : `Cover image for ${title}`}
           fill
-          sizes="(max-width: 1024px) 100vw, 33vw"
+          sizes="(max-width: 640px) calc(100vw - 2rem), (max-width: 1024px) 50vw, 33vw"
           className="object-cover transition-transform duration-300 [@media(hover:hover)]:group-hover:scale-[1.02]"
           loading="lazy"
         />
       </div>
 
-      <div className="p-6 min-h-[200px]">
+      <div className="p-4 sm:p-5 lg:p-6 min-h-[160px] sm:min-h-[180px] lg:min-h-[200px]">
         <div className="mb-3 flex items-center justify-between gap-3">
           <span
             className={[
@@ -91,7 +91,7 @@ export default function BlogCard({
 
         <h3
           className={[
-            "text-xl font-bold mb-3 transition-colors",
+            "text-lg sm:text-xl font-bold mb-2 sm:mb-3 transition-colors break-words",
             variant === "glass"
               ? "text-gray-50"
               : "text-olive-900 [@media(hover:hover)]:group-hover:text-olive-700",
@@ -101,7 +101,7 @@ export default function BlogCard({
         </h3>
         <p
           className={[
-            "mb-4 leading-relaxed text-sm line-clamp-3",
+            "mb-3 sm:mb-4 leading-relaxed text-sm line-clamp-3 break-words",
             variant === "glass" ? "text-white/85" : "text-gray-600",
           ].join(" ")}
         >
