@@ -1,16 +1,16 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Star, Quote, X } from "lucide-react";
 
-interface Testimonial {
+interface FeedbackItem {
   id: string;
   name: string;
   role: string;
   company: string;
-  content: string;
+  message: string;
   rating: number;
-  isOwner?: boolean;
+  createdAt: Date;
 }
 
 interface FeedbackFormData {
@@ -22,8 +22,7 @@ interface FeedbackFormData {
 }
 
 export default function TestimonialSection() {
-  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [feedbacks, setFeedbacks] = useState<FeedbackItem[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState<FeedbackFormData>({
     name: "",
@@ -36,38 +35,6 @@ export default function TestimonialSection() {
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [errors, setErrors] = useState<Partial<Record<keyof FeedbackFormData, string>>>({});
   const [thankYouMessage, setThankYouMessage] = useState(false);
-
-  // Fetch testimonials
-  useEffect(() => {
-    fetchTestimonials();
-  }, []);
-
-  const fetchTestimonials = async () => {
-    try {
-      const response = await fetch("/api/feedback");
-      const data = await response.json();
-      if (data.testimonials) {
-        // Map API data to component format
-        const mapped = data.testimonials.map((t: any) => ({
-          id: t.id,
-          name: t.name,
-          role: t.role,
-          company: t.company,
-          content: t.message,
-          rating: t.rating,
-          // Read-only: no edit/delete functionality
-          isOwner: false,
-        }));
-        setTestimonials(mapped);
-      }
-    } catch (error) {
-      console.error("Failed to fetch testimonials:", error);
-      // Fallback to empty array
-      setTestimonials([]);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -106,7 +73,7 @@ export default function TestimonialSection() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!validateForm()) {
@@ -116,65 +83,34 @@ export default function TestimonialSection() {
     setIsSubmitting(true);
     setErrors({});
 
-    try {
-      const response = await fetch("/api/feedback", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+    const newFeedback: FeedbackItem = {
+      id: Date.now().toString(),
+      name: formData.name.trim(),
+      role: formData.role.trim(),
+      company: formData.company.trim(),
+      rating: formData.rating,
+      message: formData.message.trim(),
+      createdAt: new Date(),
+    };
 
-      const data = await response.json();
+    setFeedbacks((prev) => [newFeedback, ...prev]);
 
-      if (response.ok && data.success && data.feedback) {
-        // Immediately add the new testimonial to the top of the list
-        const newTestimonial: Testimonial = {
-          id: data.feedback.id,
-          name: data.feedback.name,
-          role: data.feedback.role,
-          company: data.feedback.company,
-          content: data.feedback.message,
-          rating: data.feedback.rating,
-          // Read-only: no edit/delete functionality
-          isOwner: false,
-        };
+    setFormData({
+      name: "",
+      role: "",
+      company: "",
+      rating: 0,
+      message: "",
+    });
 
-        // Prepend to testimonials list (appears at top)
-        setTestimonials((prev) => {
-          const updated = [newTestimonial, ...prev];
-          // Keep only latest 6 testimonials
-          return updated.slice(0, 6);
-        });
-
-        // Reset form
-        setFormData({
-          name: "",
-          role: "",
-          company: "",
-          rating: 0,
-          message: "",
-        });
-
-        // Show thank you message and close modal
-        setSubmitSuccess(true);
-        setTimeout(() => {
-          setIsModalOpen(false);
-          setSubmitSuccess(false);
-          // Show subtle thank you message below testimonials
-          setThankYouMessage(true);
-          setTimeout(() => {
-            setThankYouMessage(false);
-          }, 3000);
-        }, 500);
-      } else {
-        setErrors({ message: data.error || "Failed to submit feedback" } as any);
-      }
-    } catch (error) {
-      setErrors({ message: "Failed to submit feedback. Please try again." } as any);
-    } finally {
-      setIsSubmitting(false);
-    }
+    setSubmitSuccess(true);
+    setIsSubmitting(false);
+    setTimeout(() => {
+      setIsModalOpen(false);
+      setSubmitSuccess(false);
+      setThankYouMessage(true);
+      setTimeout(() => setThankYouMessage(false), 3000);
+    }, 500);
   };
 
   const handleCloseModal = () => {
@@ -192,37 +128,6 @@ export default function TestimonialSection() {
     }
   };
 
-
-  // Show loading state
-  if (loading) {
-    return (
-      <section
-        className={[
-          "omni-bg-overlay py-20",
-          "bg-[url('/images/backgrounds/testimonials-bg.jpg')] bg-cover bg-center bg-no-repeat",
-        ].join(" ")}
-      >
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-              What Our Clients Say
-            </h2>
-            <p className="text-xl text-white/80 max-w-2xl mx-auto">
-              Trusted by businesses worldwide to deliver exceptional results
-            </p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[1, 2, 3].map((i) => (
-              <div
-                key={i}
-                className="bg-gray-50 rounded-xl p-6 h-64 animate-pulse"
-              />
-            ))}
-          </div>
-        </div>
-      </section>
-    );
-  }
 
   return (
     <>
@@ -242,52 +147,60 @@ export default function TestimonialSection() {
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, index) => (
-              <div
-                key={testimonial.id}
-                className="group relative omni-glass-card p-6"
-                style={{
-                  animation: `fadeUp 0.6s ease-out ${index * 0.15}s both`,
-                }}
-              >
-                <div className="absolute top-4 right-4 opacity-10">
-                  <Quote className="w-12 h-12 text-white" />
-                </div>
-
-
-                <div className="flex items-center mb-4">
-                  {[...Array(5)].map((_, i) => {
-                    const filled = i < testimonial.rating;
-                    return (
-                      <Star
-                        key={i}
-                        className={`w-5 h-5 ${
-                          filled
-                            ? "fill-yellow-400 text-yellow-400"
-                            : "fill-transparent text-gray-200"
-                        }`}
-                      />
-                    );
-                  })}
-                </div>
-                <p className="text-white/85 mb-6 leading-relaxed relative z-10">
-                  "{testimonial.content}"
+            {feedbacks.length === 0 ? (
+              <div className="col-span-full text-center py-12">
+                <p className="text-xl text-white/85">
+                  No feedback yet. Be the first to share your experience.
                 </p>
-                <div className="flex items-center space-x-4">
-                  <div className="w-12 h-12 rounded-full bg-white/15 border border-white/20 flex items-center justify-center text-white font-bold text-lg">
-                    {testimonial.name.charAt(0)}
+              </div>
+            ) : (
+              feedbacks.map((feedback, index) => (
+                <div
+                  key={feedback.id}
+                  className="group relative omni-glass-card p-6"
+                  style={{
+                    animation: `fadeUp 0.6s ease-out ${index * 0.15}s both`,
+                  }}
+                >
+                  <div className="absolute top-4 right-4 opacity-10">
+                    <Quote className="w-12 h-12 text-white" />
                   </div>
-                  <div>
-                    <p className="font-semibold text-gray-50">
-                      {testimonial.name}
-                    </p>
-                    <p className="text-sm text-white/75">
-                      {testimonial.role}, {testimonial.company}
-                    </p>
+
+
+                  <div className="flex items-center mb-4">
+                    {[...Array(5)].map((_, i) => {
+                      const filled = i < feedback.rating;
+                      return (
+                        <Star
+                          key={i}
+                          className={`w-5 h-5 ${
+                            filled
+                              ? "fill-yellow-400 text-yellow-400"
+                              : "fill-transparent text-gray-200"
+                          }`}
+                        />
+                      );
+                    })}
+                  </div>
+                  <p className="text-white/85 mb-6 leading-relaxed relative z-10">
+                    "{feedback.message}"
+                  </p>
+                  <div className="flex items-center space-x-4">
+                    <div className="w-12 h-12 rounded-full bg-white/15 border border-white/20 flex items-center justify-center text-white font-bold text-lg">
+                      {feedback.name.charAt(0)}
+                    </div>
+                    <div>
+                      <p className="font-semibold text-gray-50">
+                        {feedback.name}
+                      </p>
+                      <p className="text-sm text-white/75">
+                        {feedback.role}, {feedback.company}
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))
+            )}
           </div>
 
           {/* Subtle feedback link */}
