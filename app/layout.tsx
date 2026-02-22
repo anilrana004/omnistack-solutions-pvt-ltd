@@ -5,9 +5,41 @@ import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import { validateAndLog } from "@/src/lib/env-validation";
 
+const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/+$/, "") || "https://www.omnistack.co.in";
+const DEFAULT_DESCRIPTION =
+  "OmniStack Solutions Pvt Ltd is a full stack development company offering custom software, web and mobile apps, AI solutions, and cloud services for businesses in India and globally.";
+
 export const metadata: Metadata = {
-  title: "AI & Software Development Company in India | Omnistack Solutions",
-  description: "Omnistack Solutions provides AI automation, custom software, SaaS platforms, web and mobile app development services for scalable digital growth.",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: "OmniStack Solutions Pvt Ltd | Full Stack Development Company",
+    template: "%s | OmniStack Solutions Pvt Ltd",
+  },
+  description: DEFAULT_DESCRIPTION,
+  manifest: "/site.webmanifest",
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/favicon-16x16.png", type: "image/png", sizes: "16x16" },
+      { url: "/favicon-32x32.png", type: "image/png", sizes: "32x32" },
+    ],
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
+  },
+  openGraph: {
+    type: "website",
+    url: SITE_URL,
+    title: "OmniStack Solutions Pvt Ltd | Full Stack Development Company",
+    description: DEFAULT_DESCRIPTION,
+    images: [{ url: "/logo.png", width: 512, height: 512, alt: "OmniStack Solutions Pvt Ltd" }],
+    siteName: "OmniStack Solutions Pvt Ltd",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "OmniStack Solutions Pvt Ltd | Full Stack Development Company",
+    description: DEFAULT_DESCRIPTION,
+    images: ["/logo.png"],
+  },
 };
 
 /**
@@ -23,25 +55,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   // Validate environment variables on server startup
-  // This runs on every server render, but validation is fast
-  if (typeof window === 'undefined') {
-    // Only run on server
+  if (typeof window === "undefined") {
     try {
       validateAndLog();
-    } catch (error) {
-      // Log but don't crash - build-time validation will catch critical issues
-      console.error('Environment validation error:', error);
+    } catch {
+      // Build-time validation will catch critical issues; no production console logs
     }
   }
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/+$/, "") || "https://omnistack.co.in";
   const organizationSchema = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: "Omnistack Solutions",
-    url: siteUrl,
-    logo: `${siteUrl}/favicon.ico`,
-    description: "Omnistack Solutions provides AI automation, custom software, SaaS platforms, web and mobile app development services for scalable digital growth.",
+    name: "OmniStack Solutions Pvt Ltd",
+    url: `${SITE_URL}/`,
+    logo: `${SITE_URL}/logo.png`,
+    description: DEFAULT_DESCRIPTION,
     address: {
       "@type": "PostalAddress",
       addressLocality: "Dehradun",
@@ -59,7 +87,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link rel="icon" href="/favicon.ico" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
