@@ -63,10 +63,10 @@ export default function TestimonialSection({
         <TestimonialWrapper
           loading={loading}
           error={error}
-          empty={!testimonials.length}
+          empty={!testimonials.slice(1).length}
         >
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {testimonials.map((testimonial) => (
+            {testimonials.slice(1).map((testimonial) => (
               <TestimonialCard
                 key={testimonial._id}
                 testimonial={testimonial}

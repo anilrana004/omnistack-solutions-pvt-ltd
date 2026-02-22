@@ -175,19 +175,6 @@ export class FallbackContentGenerator {
   static generateFallbackTestimonials(): SanityTestimonial[] {
     const testimonials: Omit<SanityTestimonial, '_id' | '_type'>[] = [
       {
-        clientName: 'John D.',
-        clientTitle: 'CEO',
-        companyName: 'Tech Startup Inc.',
-        testimonial: 'Outstanding work on our web application. The team delivered exactly what we needed on time and within budget.',
-        rating: 5,
-        projectType: 'web',
-        featured: true,
-        order: 1,
-        isVerified: false,
-        isEnabled: true,
-        receivedAt: new Date().toISOString(),
-      },
-      {
         clientName: 'Sarah M.',
         clientTitle: 'Marketing Director',
         companyName: 'Growth Co.',
@@ -195,7 +182,7 @@ export class FallbackContentGenerator {
         rating: 5,
         projectType: 'mobile',
         featured: true,
-        order: 2,
+        order: 1,
         isVerified: false,
         isEnabled: true,
         receivedAt: new Date().toISOString(),
@@ -208,7 +195,7 @@ export class FallbackContentGenerator {
         rating: 5,
         projectType: 'cloud',
         featured: false,
-        order: 3,
+        order: 2,
         isVerified: false,
         isEnabled: true,
         receivedAt: new Date().toISOString(),
