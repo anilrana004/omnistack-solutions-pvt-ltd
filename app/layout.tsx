@@ -6,8 +6,8 @@ import WhatsAppButton from "@/components/WhatsAppButton";
 import { validateAndLog } from "@/src/lib/env-validation";
 
 export const metadata: Metadata = {
-  title: "OmniStack Solutions - Building Everything. Empowering Everyone.",
-  description: "OmniStack Solutions is a full-stack technology company delivering websites, apps, AI, cloud, and automation for modern businesses.",
+  title: "AI & Software Development Company in India | Omnistack Solutions",
+  description: "Omnistack Solutions provides AI automation, custom software, SaaS platforms, web and mobile app development services for scalable digital growth.",
 };
 
 /**
@@ -34,10 +34,36 @@ export default function RootLayout({
     }
   }
 
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/+$/, "") || "https://omnistack.co.in";
+  const organizationSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "Omnistack Solutions",
+    url: siteUrl,
+    logo: `${siteUrl}/favicon.ico`,
+    description: "Omnistack Solutions provides AI automation, custom software, SaaS platforms, web and mobile app development services for scalable digital growth.",
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Dehradun",
+      addressRegion: "Uttarakhand",
+      addressCountry: "IN",
+    },
+    contactPoint: {
+      "@type": "ContactPoint",
+      email: "admin@omnistack.co.in",
+      contactType: "customer service",
+      areaServed: "IN",
+    },
+  };
+
   return (
     <html lang="en">
       <head>
         <link rel="icon" href="/favicon.ico" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+        />
       </head>
       <body className="min-h-screen flex flex-col">
         <Navbar />
