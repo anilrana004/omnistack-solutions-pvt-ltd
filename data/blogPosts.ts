@@ -3,6 +3,9 @@ export type BlogPost = {
   title: string
   slug: string
   type: 'Blog' | 'News'
+  category?: string
+  tags?: string[]
+  readingTime?: number
   excerpt: string
   publishedAt: string
   featured?: boolean

@@ -244,6 +244,10 @@ export interface SanityBlogListItem {
   title: string
   slug: string
   excerpt?: string
+  category?: string
+  tags?: string[]
+  readingTime?: number
+  metaDescription?: string
   coverImageUrl?: string | null
   publishedAt: string
 }
@@ -252,6 +256,12 @@ export interface SanityBlogDetail {
   _id: string
   title: string
   slug: string
+  excerpt?: string
+  category?: string
+  tags?: string[]
+  readingTime?: number
+  metaDescription?: string
+  seo?: SEO
   coverImageUrl?: string | null
   publishedAt: string
   content?: SanityBlock[]

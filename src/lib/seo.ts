@@ -215,19 +215,31 @@ export class SEOManager {
 
   // Generate metadata for blog posts
   generateBlogMetadata(
-    blog: { title: string; excerpt?: string; coverImageUrl?: string | null; publishedAt: string },
+    blog: {
+      title: string
+      excerpt?: string
+      metaDescription?: string
+      category?: string
+      tags?: string[]
+      seo?: SEO
+      coverImageUrl?: string | null
+      publishedAt: string
+    },
     pathname: string = ''
   ): Metadata {
     const baseUrl = this.getBaseUrl()
     const url = `${baseUrl}${pathname}`
     
-    const title = `${blog.title} | Blog - ${this.getDefaultTitle()}`
-    const description = blog.excerpt || this.getDefaultDescription()
+    const title = blog.seo?.metaTitle || `${blog.title} | Blog - ${this.getDefaultTitle()}`
+    const description =
+      blog.seo?.metaDescription || blog.metaDescription || blog.excerpt || this.getDefaultDescription()
     const ogImage = blog.coverImageUrl || this.getDefaultOgImage()
+    const keywords = blog.seo?.keywords || blog.tags
 
     const metadata: Metadata = {
       title,
       description,
+      keywords,
       openGraph: {
         title,
         description,
@@ -238,6 +250,7 @@ export class SEOManager {
         ...(blog.publishedAt && {
           article: {
             publishedTime: blog.publishedAt,
+            tags: blog.tags,
             section: 'Blog',
           },
         }),

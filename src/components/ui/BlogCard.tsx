@@ -6,6 +6,9 @@ export interface BlogCardProps {
   title: string;
   excerpt: string;
   publishedAt: string;
+  category?: string;
+  tags?: string[];
+  readingTime?: number;
   type?: string;
   imageUrl?: string | null;
   imageFallback?: { src: string; alt: string };
@@ -18,6 +21,9 @@ export default function BlogCard({
   title,
   excerpt,
   publishedAt,
+  category,
+  tags,
+  readingTime,
   type,
   imageUrl,
   imageFallback = { src: "/assets/images/blog-fallback.svg", alt: "Blog post cover" },
@@ -25,7 +31,12 @@ export default function BlogCard({
   variant = "default",
 }: BlogCardProps) {
   const href = `/blogs/${slug}`;
-  const badge = type ? String(type) : null;
+  const badge = category ? String(category) : type ? String(type) : null;
+  const safeReadingTime =
+    typeof readingTime === "number" && Number.isFinite(readingTime) && readingTime > 0
+      ? `${Math.round(readingTime)} min read`
+      : null;
+  const visibleTags = Array.isArray(tags) ? tags.filter(Boolean).slice(0, 2) : [];
 
   const dateLabel =
     publishedAt && !Number.isNaN(new Date(publishedAt).getTime())
@@ -66,14 +77,26 @@ export default function BlogCard({
 
       <div className="p-6 min-h-[200px]">
         <div className="mb-3 flex items-center justify-between gap-3">
-          <span
-            className={[
-              "text-xs",
-              variant === "glass" ? "text-white/70" : "text-gray-500",
-            ].join(" ")}
-          >
-            {dateLabel}
-          </span>
+          <div className="flex items-center gap-2">
+            <span
+              className={[
+                "text-xs",
+                variant === "glass" ? "text-white/70" : "text-gray-500",
+              ].join(" ")}
+            >
+              {dateLabel}
+            </span>
+            {safeReadingTime ? (
+              <span
+                className={[
+                  "text-xs",
+                  variant === "glass" ? "text-white/70" : "text-gray-500",
+                ].join(" ")}
+              >
+                • {safeReadingTime}
+              </span>
+            ) : null}
+          </div>
           {badge ? (
             <span
               className={[
@@ -106,6 +129,24 @@ export default function BlogCard({
         >
           {excerpt}
         </p>
+
+        {visibleTags.length > 0 ? (
+          <div className="mb-3 flex gap-2 flex-wrap">
+            {visibleTags.map((tag) => (
+              <span
+                key={tag}
+                className={[
+                  "text-[11px] px-2 py-1 rounded-full",
+                  variant === "glass"
+                    ? "bg-white/10 text-white/80 border border-white/10"
+                    : "bg-gray-100 text-gray-700",
+                ].join(" ")}
+              >
+                #{tag}
+              </span>
+            ))}
+          </div>
+        ) : null}
 
         <div
           className={[

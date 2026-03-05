@@ -278,6 +278,10 @@ export const allBlogsQuery = /* groq */ `*[_type == "post" && defined(slug.curre
   title,
   "slug": slug.current,
   excerpt,
+  category,
+  tags,
+  readingTime,
+  "metaDescription": coalesce(seo.metaDescription, excerpt),
   "coverImageUrl": coalesce(coverImage, mainImage).asset->url,
   "publishedAt": coalesce(publishedAt, _createdAt)
 }`
@@ -286,6 +290,16 @@ export const blogBySlugQuery = /* groq */ `*[_type == "post" && slug.current == 
   _id,
   title,
   "slug": slug.current,
+  excerpt,
+  category,
+  tags,
+  readingTime,
+  "metaDescription": coalesce(seo.metaDescription, excerpt),
+  seo {
+    metaTitle,
+    metaDescription,
+    keywords
+  },
   "coverImageUrl": coalesce(coverImage, mainImage).asset->url,
   "publishedAt": coalesce(publishedAt, _createdAt),
   content

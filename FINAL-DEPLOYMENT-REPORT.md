@@ -317,13 +317,13 @@ git push -u origin main
      - `NEXT_PUBLIC_SANITY_DATASET=production`
      - `NEXT_PUBLIC_SANITY_API_VERSION=2024-01-01`
      - `NEXT_PUBLIC_SITE_URL=https://omnistack.co.in`
-     - `SANITY_API_TOKEN=skVHEEgbzVfhGqm82WqUPQYBH1JCTVuSxr6biWe4ssYTgkv8RLISxZoesD8VIbORA4G3ciHz2KhP2EtJkkPTibmtJjJM1w0GsHURSoHOsqFFRaYSEIEvVcN2tUq3UQd53iX9JEoOcLKxzqDDSswxeanJdwaNvnUe25aNWrFqVqSqsiyK5UzF`
-     - `SANITY_PREVIEW_SECRET=omnistack_preview_secret_2026`
+    - `SANITY_API_TOKEN=sk-your-token-here`
+    - `SANITY_PREVIEW_SECRET=your-preview-secret-here`
      - `SMTP_HOST=smtpout.secureserver.net`
      - `SMTP_PORT=587`
      - `SMTP_SECURE=false`
      - `SMTP_USER=admin@omnistack.co.in`
-     - `SMTP_PASS=Anysingh@123`
+    - `SMTP_PASS=your-smtp-password-here`
      - `ADMIN_EMAIL=admin@omnistack.co.in`
      - `IG_LONG_LIVED_ACCESS_TOKEN=...` (optional)
      - `IG_BUSINESS_ID=...` (optional)

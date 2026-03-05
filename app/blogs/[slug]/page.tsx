@@ -53,6 +53,11 @@ export default async function BlogDetailPage({
           day: "numeric",
         })
       : "";
+  const readingTimeLabel =
+    typeof post.readingTime === "number" && Number.isFinite(post.readingTime) && post.readingTime > 0
+      ? `${Math.round(post.readingTime)} min read`
+      : "";
+  const tags = Array.isArray(post.tags) ? post.tags.filter(Boolean) : [];
 
   return (
     <div className={preview ? "pt-36" : "pt-16"}>
@@ -75,6 +80,12 @@ export default async function BlogDetailPage({
           <div className="omni-glass p-4 sm:p-6 md:p-8">
             <div className="mb-4 sm:mb-6 flex items-center gap-2 sm:gap-3 flex-wrap">
               {dateLabel ? <span className="text-xs text-white/70">{dateLabel}</span> : null}
+              {readingTimeLabel ? <span className="text-xs text-white/70">• {readingTimeLabel}</span> : null}
+              {post.category ? (
+                <span className="px-2 py-1 text-xs bg-white/10 text-white/85 border border-white/15 rounded-full">
+                  {post.category}
+                </span>
+              ) : null}
               {preview && (
                 <span className="px-2 py-1 text-xs bg-blue-500 text-white rounded">
                   PREVIEW
@@ -100,6 +111,19 @@ export default async function BlogDetailPage({
             <article className="prose prose-sm sm:prose-base md:prose-lg max-w-none mt-6 sm:mt-8 md:mt-10 prose-invert prose-headings:text-gray-50 prose-p:text-white/90 prose-p:leading-relaxed prose-a:text-blue-300 prose-a:no-underline hover:prose-a:underline prose-strong:text-white prose-ul:text-white/90 prose-ol:text-white/90 prose-li:text-white/90 prose-img:rounded-lg prose-img:w-full prose-img:max-w-full prose-img:h-auto prose-blockquote:border-l-white/30 prose-blockquote:text-white/80 prose-code:text-white prose-pre:bg-black/40 prose-pre:text-white/90 [&>*]:overflow-x-auto [&>*]:break-words [&>p]:break-words [&>h1]:break-words [&>h2]:break-words [&>h3]:break-words [&>h4]:break-words [&>h5]:break-words [&>h6]:break-words">
               {post.content ? <PortableText value={post.content as any} /> : null}
             </article>
+
+            {tags.length > 0 ? (
+              <div className="mt-6 flex flex-wrap gap-2">
+                {tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="px-2.5 py-1 text-xs bg-white/10 text-white/85 border border-white/15 rounded-full"
+                  >
+                    #{tag}
+                  </span>
+                ))}
+              </div>
+            ) : null}
           </div>
         </div>
       </section>

@@ -25,7 +25,10 @@ async function BlogsPageView() {
           _id: p._id,
           title: p.title,
           slug: p.slug,
-          type: "Blog",
+          type: "Blog" as const,
+          category: p.category,
+          tags: p.tags ?? [],
+          readingTime: p.readingTime,
           excerpt: p.excerpt ?? "",
           publishedAt: p.publishedAt ?? new Date().toISOString(),
           imageUrl: p.coverImageUrl ?? null,
@@ -105,6 +108,9 @@ async function BlogsPageView() {
                   title={post.title}
                   excerpt={post.excerpt}
                   publishedAt={post.publishedAt}
+                  category={post.category}
+                  tags={post.tags}
+                  readingTime={post.readingTime}
                   type={post.type}
                   imageUrl={post.imageUrl}
                   variant="glass"

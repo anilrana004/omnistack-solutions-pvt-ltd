@@ -73,6 +73,9 @@ export default function BlogSection({
                 title={post.title}
                 excerpt={post.excerpt || ""}
                 publishedAt={post.publishedAt || ""}
+                category={post.category}
+                tags={post.tags}
+                readingTime={post.readingTime}
                 imageUrl={post.coverImageUrl}
                 variant="glass"
               />
