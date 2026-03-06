@@ -48,7 +48,7 @@ export default function BlogCard({
       : "";
 
   const cardClasses = [
-    "card-clickable block rounded-xl group overflow-hidden",
+    "card-clickable block rounded-xl group overflow-hidden w-full min-w-0 max-w-full touch-manipulation",
     variant === "glass"
       ? "omni-glass-card"
       : [
@@ -64,20 +64,20 @@ export default function BlogCard({
 
   return (
     <Link href={href} className={cardClasses}>
-      <div className="relative w-full aspect-[16/9] bg-gray-100 overflow-hidden">
+      <div className="relative w-full aspect-[16/9] bg-gray-100 overflow-hidden shrink-0">
         <Image
           src={imageUrl || imageFallback.src}
           alt={imageUrl ? title : imageFallback.alt}
           fill
-          sizes="(max-width: 1024px) 100vw, 33vw"
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           className="object-cover transition-transform duration-300 [@media(hover:hover)]:group-hover:scale-[1.02]"
           loading="lazy"
         />
       </div>
 
-      <div className="p-6 min-h-[200px]">
-        <div className="mb-3 flex items-center justify-between gap-3">
-          <div className="flex items-center gap-2">
+      <div className="p-4 sm:p-5 lg:p-6 min-h-[160px] sm:min-h-[180px] lg:min-h-[200px]">
+        <div className="mb-3 flex flex-wrap items-center justify-between gap-2 sm:gap-3">
+          <div className="flex items-center gap-2 min-w-0 shrink">
             <span
               className={[
                 "text-xs",
@@ -97,10 +97,10 @@ export default function BlogCard({
               </span>
             ) : null}
           </div>
-          {badge ? (
+            {badge ? (
             <span
               className={[
-                "text-xs px-2 py-1 rounded-full font-medium",
+                "text-xs px-2 py-1 rounded-full font-medium flex-shrink-0 truncate max-w-[140px] sm:max-w-none",
                 variant === "glass"
                   ? "bg-white/10 text-white/85 border border-white/15"
                   : "bg-olive-100 text-olive-800",
@@ -113,7 +113,7 @@ export default function BlogCard({
 
         <h3
           className={[
-            "text-xl font-bold mb-3 transition-colors",
+            "text-lg sm:text-xl font-bold mb-2 sm:mb-3 transition-colors break-words",
             variant === "glass"
               ? "text-gray-50"
               : "text-olive-900 [@media(hover:hover)]:group-hover:text-olive-700",
@@ -123,7 +123,7 @@ export default function BlogCard({
         </h3>
         <p
           className={[
-            "mb-4 leading-relaxed text-sm line-clamp-3",
+            "mb-3 sm:mb-4 leading-relaxed text-sm line-clamp-3 break-words",
             variant === "glass" ? "text-white/85" : "text-gray-600",
           ].join(" ")}
         >

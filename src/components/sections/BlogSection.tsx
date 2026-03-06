@@ -45,16 +45,16 @@ export default function BlogSection({
 
   return (
     <section 
-      className={`omni-bg-overlay ${className}`}
+      className={`omni-bg-overlay min-w-0 overflow-x-hidden ${className}`}
       style={sectionStyle}
     >
-      <SectionContainer>
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-50 mb-6">
+      <SectionContainer className="py-10 sm:py-14 lg:py-20">
+        <div className="text-center mb-8 sm:mb-12 lg:mb-16 px-1">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-50 mb-4 sm:mb-6 break-words">
             {title}
           </h2>
           {subtitle && (
-            <p className="text-xl text-white/85 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-base sm:text-lg md:text-xl text-white/85 max-w-3xl mx-auto leading-relaxed px-2">
               {subtitle}
             </p>
           )}
@@ -65,7 +65,7 @@ export default function BlogSection({
           error={error}
           empty={!displayPosts.length}
         >
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mb-8 sm:mb-12 min-w-0">
             {displayPosts.map((post) => (
               <BlogCard
                 key={post._id}

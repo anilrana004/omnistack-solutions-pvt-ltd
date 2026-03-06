@@ -51,7 +51,7 @@ export default function BlogCard({
     <Link
       href={href}
       className={[
-        "card-clickable block rounded-xl group overflow-hidden w-full min-w-0",
+        "card-clickable block rounded-xl group overflow-hidden w-full min-w-0 max-w-full touch-manipulation",
         variant === "glass"
           ? "omni-glass-card"
           : [
@@ -65,20 +65,20 @@ export default function BlogCard({
         className,
       ].join(" ")}
     >
-      <div className="relative w-full aspect-[16/9] bg-gray-100 overflow-hidden min-h-0">
+      <div className="relative w-full aspect-[16/9] bg-gray-100 overflow-hidden min-h-0 shrink-0">
         <Image
           src={imageUrl || blogFallbackCover.src}
           alt={imageUrl ? title : `Cover image for ${title}`}
           fill
-          sizes="(max-width: 640px) calc(100vw - 2rem), (max-width: 1024px) 50vw, 33vw"
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           className="object-cover transition-transform duration-300 [@media(hover:hover)]:group-hover:scale-[1.02]"
           loading="lazy"
         />
       </div>
 
       <div className="p-4 sm:p-5 lg:p-6 min-h-[160px] sm:min-h-[180px] lg:min-h-[200px]">
-        <div className="mb-3 flex items-center justify-between gap-3">
-          <div className="flex items-center gap-2">
+        <div className="mb-3 flex flex-wrap items-center justify-between gap-2 sm:gap-3">
+          <div className="flex items-center gap-2 min-w-0 shrink">
             <span
               className={[
                 "text-xs",
@@ -98,10 +98,10 @@ export default function BlogCard({
               </span>
             ) : null}
           </div>
-          {badge ? (
+            {badge ? (
             <span
               className={[
-                "text-xs px-2 py-1 rounded-full font-medium",
+                "text-xs px-2 py-1 rounded-full font-medium flex-shrink-0 truncate max-w-[140px] sm:max-w-none",
                 variant === "glass"
                   ? "bg-white/10 text-white/85 border border-white/15"
                   : "bg-olive-100 text-olive-800",

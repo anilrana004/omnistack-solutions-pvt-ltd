@@ -8,19 +8,19 @@ export default function BlogsError({
   reset: () => void;
 }) {
   return (
-    <div className="pt-16">
+    <div className="pt-14 sm:pt-16 min-w-0 overflow-x-hidden">
       <section
         className={[
-          "omni-bg-overlay py-20 text-white",
+          "omni-bg-overlay py-12 sm:py-16 md:py-20 text-white",
           "bg-[url('/images/backgrounds/blogs-news-bg.jpg.jpg')] bg-cover bg-center bg-no-repeat",
         ].join(" ")}
       >
         <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="omni-glass p-8 text-center">
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-50">
+          <div className="omni-glass p-5 sm:p-6 md:p-8 text-center rounded-xl sm:rounded-2xl">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-50 break-words">
               Something went wrong
             </h1>
-            <p className="mt-3 text-white/85">
+            <p className="mt-3 text-sm sm:text-base text-white/85">
               We couldn’t load blogs right now. Please try again.
             </p>
             <button

@@ -1,8 +1,30 @@
+import type { Metadata } from "next";
 import dynamic from "next/dynamic";
 import Hero from "@/components/Hero";
 import ServicesSection from "@/components/ServicesSection";
 
 export const revalidate = 60;
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/+$/, "") || "https://omnistack.co.in";
+
+export const metadata: Metadata = {
+  title: "OmniStack Solutions | Full Stack Development Company India",
+  description:
+    "Full stack web development, AI automation, and mobile apps from a senior team in India. Launch faster and grow smarter—book a free strategy call today.",
+  alternates: { canonical: `${SITE_URL}/` },
+  openGraph: {
+    url: `${SITE_URL}/`,
+    title: "OmniStack Solutions | Full Stack Development Company India",
+    description:
+      "Full stack web development, AI automation, and mobile apps from a senior team in India. Launch faster and grow smarter—book a free strategy call today.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "OmniStack Solutions | Full Stack Development Company India",
+    description:
+      "Full stack web development, AI automation, and mobile apps from a senior team in India. Launch faster and grow smarter—book a free strategy call today.",
+  },
+};
 
 // Lazy load below-the-fold sections
 const TestimonialSection = dynamic(() => import("@/components/TestimonialSection"), {
