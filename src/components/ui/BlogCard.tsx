@@ -153,8 +153,9 @@ export default function BlogCard({
             "inline-flex items-center text-sm font-medium",
             variant === "glass" ? "text-white/90" : "text-olive-600",
           ].join(" ")}
+          aria-hidden="true"
         >
-          Read more →
+          Read full article: {title}
         </div>
       </div>
     </Link>

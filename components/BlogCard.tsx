@@ -114,7 +114,7 @@ export default function BlogCard({
 
         <h3
           className={[
-            "text-lg sm:text-xl font-bold mb-2 sm:mb-3 transition-colors break-words",
+            "text-base sm:text-xl font-bold mb-2 sm:mb-3 transition-colors break-words line-clamp-2 sm:line-clamp-none",
             variant === "glass"
               ? "text-gray-50"
               : "text-olive-900 [@media(hover:hover)]:group-hover:text-olive-700",
@@ -124,7 +124,7 @@ export default function BlogCard({
         </h3>
         <p
           className={[
-            "mb-3 sm:mb-4 leading-relaxed text-sm line-clamp-3 break-words",
+            "mb-2 sm:mb-4 leading-relaxed text-xs sm:text-sm line-clamp-3 break-words",
             variant === "glass" ? "text-white/85" : "text-gray-600",
           ].join(" ")}
         >
@@ -154,8 +154,9 @@ export default function BlogCard({
             "inline-flex items-center text-sm font-medium",
             variant === "glass" ? "text-white/90" : "text-olive-600",
           ].join(" ")}
+          aria-hidden="true"
         >
-          Read more →
+          Read full article: {title}
         </div>
       </div>
     </Link>

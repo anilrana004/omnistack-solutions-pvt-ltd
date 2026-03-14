@@ -1,8 +1,26 @@
+import type { Metadata } from "next";
 import ContactForm from "@/components/ContactForm";
 import FAQSection from "@/components/FAQSection";
 import { faqs } from "@/data/faqs";
 import { Suspense } from "react";
 import ContactFormWithPlan from "./ContactFormWithPlan";
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/+$/, "") || "https://omnistack.co.in";
+
+export const metadata: Metadata = {
+  title: "Contact Us | Get a Free Strategy Call",
+  description:
+    "Discuss your project with OmniStack Solutions. Full stack development, AI automation, mobile apps, and cloud services. Free consultation for businesses in India and globally.",
+  keywords: ["contact OmniStack", "hire developers India", "free consultation", "web development quote"],
+  alternates: { canonical: `${SITE_URL}/contact` },
+  openGraph: {
+    url: `${SITE_URL}/contact`,
+    title: "Contact Us | OmniStack Solutions",
+    description: "Get a free strategy call. Discuss your project with our full stack development team.",
+    type: "website",
+  },
+  twitter: { card: "summary_large_image", title: "Contact Us | OmniStack Solutions" },
+};
 
 export default function ContactPage() {
   // FAQPage JSON-LD Structured Data

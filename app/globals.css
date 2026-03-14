@@ -247,4 +247,11 @@
   animation-delay: -15s;
 }
 
+/* Blog: mobile overflow and touch scroll for code blocks */
+.prose pre {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  max-width: 100%;
+}
+
 

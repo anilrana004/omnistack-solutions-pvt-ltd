@@ -36,11 +36,12 @@ export default async function BlogSection() {
   return (
     <section
       className={[
-        "omni-bg-overlay py-10 sm:py-14 lg:py-20 min-w-0 overflow-x-hidden",
+        "omni-bg-overlay py-10 sm:py-14 lg:py-20 min-w-0 overflow-x-hidden w-full max-w-[100vw]",
         "bg-[url('/images/backgrounds/blogs-news-bg.jpg.jpg')] bg-cover bg-center bg-no-repeat",
+        "px-[max(1rem,env(safe-area-inset-left))]",
       ].join(" ")}
     >
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 max-w-7xl mx-auto w-full min-w-0 px-0 sm:px-6 lg:px-8">
         <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-2 sm:mb-4 text-white break-words">
           Blog & News
         </h2>
@@ -50,6 +51,7 @@ export default async function BlogSection() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mb-6 sm:mb-8 lg:mb-12 w-full min-w-0">
           {featured.map((post) => (
+            <div key={post._id} className="min-w-0 w-full max-w-full">
             <BlogCard
               key={post._id}
               slug={post.slug}
@@ -63,6 +65,7 @@ export default async function BlogSection() {
               imageUrl={post.imageUrl}
               variant="glass"
             />
+            </div>
           ))}
         </div>
 

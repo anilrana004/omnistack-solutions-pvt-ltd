@@ -11,6 +11,15 @@ export default function Footer() {
     { href: "/projects", label: "Projects" },
     { href: "/about", label: "About" },
     { href: "/contact", label: "Contact" },
+    { href: "/blogs", label: "Blog" },
+  ];
+
+  const topicClusterLinks = [
+    { href: "/hire-react-developers", label: "Web Development" },
+    { href: "/hire-nodejs-developers", label: "Backend Development" },
+    { href: "/ai-automation-services", label: "AI & Automation" },
+    { href: "/cloud-devops-services", label: "Cloud & DevOps" },
+    { href: "/startup-mvp-development", label: "Startup MVP" },
   ];
 
   const socialLinks = [
@@ -19,7 +28,7 @@ export default function Footer() {
       href: "https://www.facebook.com/profile.php?id=61586898450703",
       icon: (
         <svg
-          className="w-5 h-5"
+          className="w-4 h-4 sm:w-4 sm:h-4"
           fill="currentColor"
           viewBox="0 0 24 24"
           aria-hidden="true"
@@ -37,7 +46,7 @@ export default function Footer() {
       href: "https://www.instagram.com/omnistack.dev/",
       icon: (
         <svg
-          className="w-5 h-5"
+          className="w-4 h-4 sm:w-4 sm:h-4"
           fill="currentColor"
           viewBox="0 0 24 24"
           aria-hidden="true"
@@ -55,7 +64,7 @@ export default function Footer() {
       href: "https://www.linkedin.com/company/111559343/admin/dashboard/",
       icon: (
         <svg
-          className="w-5 h-5"
+          className="w-4 h-4 sm:w-4 sm:h-4"
           fill="currentColor"
           viewBox="0 0 24 24"
           aria-hidden="true"
@@ -69,7 +78,7 @@ export default function Footer() {
       href: "https://wa.me/916396309659",
       icon: (
         <svg
-          className="w-5 h-5"
+          className="w-4 h-4 sm:w-4 sm:h-4"
           fill="currentColor"
           viewBox="0 0 24 24"
           aria-hidden="true"
@@ -83,7 +92,7 @@ export default function Footer() {
       href: "https://www.youtube.com/channel/UCTCCDLqNNoppWoAHGqQye3A",
       icon: (
         <svg
-          className="w-5 h-5"
+          className="w-4 h-4 sm:w-4 sm:h-4"
           fill="currentColor"
           viewBox="0 0 24 24"
           aria-hidden="true"
@@ -97,7 +106,7 @@ export default function Footer() {
       href: "https://x.com/omnistack_01",
       icon: (
         <svg
-          className="w-5 h-5"
+          className="w-4 h-4 sm:w-4 sm:h-4"
           viewBox="0 0 24 24"
           fill="currentColor"
           aria-hidden="true"
@@ -109,22 +118,22 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="bg-olive-900 text-white border-t border-white/10">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+    <footer className="bg-olive-900 text-white border-t border-white/10" role="contentinfo" aria-label="Site footer">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6 mb-5 sm:mb-6">
           {/* Left: Logo and Description */}
           <div>
-            <div className="flex items-center space-x-3 mb-4">
-              <Logo size={40} />
-              <span className="text-xl font-bold">OmniStack Solutions</span>
+            <div className="flex items-center space-x-2 mb-2 sm:mb-3">
+              <Logo size={28} />
+              <span className="text-base sm:text-lg font-bold">OmniStack Solutions</span>
             </div>
-            <p className="text-gray-400 max-w-md mb-3">
+            <p className="text-gray-400 text-sm max-w-md mb-1.5 sm:mb-2">
               Building Everything. Empowering Everyone.
             </p>
-            <p className="text-gray-500 text-sm max-w-md mb-4">
+            <p className="text-gray-500 text-xs sm:text-sm max-w-md mb-2 sm:mb-3">
               Full-stack, AI, and cloud solutions for growing businesses. We deliver end-to-end technology solutions that scale.
             </p>
-            <div className="space-y-2 text-sm text-gray-400">
+            <div className="space-y-1 text-xs sm:text-sm text-gray-400">
               <p>
                 <span className="font-medium text-gray-300">Email:</span>{" "}
                 <a href="mailto:admin@omnistack.co.in" className="hover:text-olive-400 transition-colors">
@@ -140,21 +149,38 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Center: Quick Links */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4 text-white">Quick Links</h3>
-            <ul className="space-y-2">
-              {footerLinks.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-gray-400 hover:text-olive-400 transition-colors"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+          {/* Center: Quick Links and Topic Clusters */}
+          <div className="flex flex-col sm:flex-row gap-6 sm:gap-8">
+            <div>
+              <h3 className="text-base font-semibold mb-2 sm:mb-3 text-white">Quick Links</h3>
+              <ul className="space-y-1">
+                {footerLinks.map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      className="text-sm text-gray-400 hover:text-olive-400 transition-colors"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-base font-semibold mb-2 sm:mb-3 text-white">Service Topics</h3>
+              <ul className="space-y-1">
+                {topicClusterLinks.map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      className="text-sm text-gray-400 hover:text-olive-400 transition-colors"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
 
           {/* Right: Social Media */}
@@ -178,8 +204,8 @@ export default function Footer() {
         </div>
 
         {/* Copyright */}
-        <div className="border-t border-white/10 pt-8">
-          <p className="text-center text-gray-400 text-sm">
+        <div className="border-t border-white/10 pt-4 sm:pt-5">
+          <p className="text-center text-gray-400 text-xs sm:text-sm">
             © {currentYear} OmniStack Solutions. All rights reserved.
           </p>
         </div>

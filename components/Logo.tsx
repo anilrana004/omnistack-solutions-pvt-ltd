@@ -24,8 +24,8 @@ export default function Logo({ className = "", size = 120 }: LogoProps) {
           height={size}
           className="object-contain"
           onError={() => setImageError(true)}
-          priority={size > 50}
-          loading={size > 50 ? "eager" : "lazy"}
+          priority={size >= 40}
+          loading={size >= 40 ? "eager" : "lazy"}
         />
       ) : null}
     </div>

@@ -78,7 +78,7 @@ export async function POST(req: NextRequest) {
 }
 
 // Disable preview mode
-export async function DELETE(req: NextRequest) {
+export async function DELETE(_req: NextRequest) {
   try {
     const response = NextResponse.json({ success: true, preview: false })
 

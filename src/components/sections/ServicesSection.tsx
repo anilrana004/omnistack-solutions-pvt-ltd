@@ -102,7 +102,7 @@ function ServiceCard({ service, onClick }: ServiceCardProps) {
         {iconUrl ? (
           <Image
             src={iconUrl}
-            alt={`${service.title} icon`}
+            alt={`${service.title} service icon - OmniStack Solutions`}
             width={32}
             height={32}
             className="object-contain"

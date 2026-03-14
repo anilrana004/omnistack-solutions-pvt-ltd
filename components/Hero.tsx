@@ -17,12 +17,13 @@ export default function Hero() {
       <div className="absolute inset-0">
         <Image
           src={backgroundSrc}
-          alt="Hero background illustration"
+          alt="Hero background: technology and full stack software development illustration for OmniStack Solutions"
           fill
           priority
           sizes="100vw"
           className="object-cover"
           onError={() => setBgError(true)}
+          fetchPriority="high"
         />
         {/* Subtle overlays for text readability */}
         <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/45 to-black/10" />
@@ -53,14 +54,16 @@ export default function Hero() {
               <Link
                 href="/contact"
                 className="inline-block px-8 py-4 bg-gradient-to-r from-olive-600 via-olive-700 to-olive-800 text-white font-semibold text-lg rounded-lg shadow-lg hover:scale-105 hover:shadow-xl transition-all duration-300"
+                aria-label="Contact OmniStack Solutions for a free consultation"
               >
                 Talk to Us
               </Link>
               <Link
                 href="/services"
                 className="inline-block px-8 py-4 bg-transparent border-2 border-white/40 text-white font-semibold text-lg rounded-lg hover:bg-white/10 hover:border-white/60 transition-all duration-300"
+                aria-label="Explore our web development, AI automation, and cloud services"
               >
-                View Services
+                Explore web development and AI automation services
               </Link>
             </div>
           </div>

@@ -304,3 +304,11 @@ export const blogBySlugQuery = /* groq */ `*[_type == "post" && slug.current == 
   "publishedAt": coalesce(publishedAt, _createdAt),
   content
 }`
+
+export const relatedBlogsQuery = /* groq */ `*[_type == "post" && defined(slug.current) && slug.current != $slug] | order(coalesce(publishedAt, _createdAt) desc) [0...3] {
+  _id,
+  title,
+  "slug": slug.current,
+  excerpt,
+  "publishedAt": coalesce(publishedAt, _createdAt)
+}`

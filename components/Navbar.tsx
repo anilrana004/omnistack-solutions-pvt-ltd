@@ -26,6 +26,7 @@ export default function Navbar() {
 
   return (
     <nav
+      aria-label="Main navigation"
       className={`sticky top-0 left-0 right-0 z-[1000] bg-white transition-all duration-200 ease-out ${
         isScrolled
           ? "border-b border-gray-200/60"
@@ -39,7 +40,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-5 md:px-6">
         <div className="flex items-center justify-between h-[52px] md:h-[56px]">
           {/* Logo */}
-          <Link href="/" className="flex items-center group">
+          <Link href="/" className="flex items-center group" aria-label="OmniStack Solutions - Home">
             <div className="group-hover:opacity-80 transition-opacity duration-200">
               <Logo size={48} />
             </div>
@@ -71,6 +72,7 @@ export default function Navbar() {
                 lineHeight: '1.25',
                 fontFamily: 'system-ui, -apple-system, "Inter", sans-serif'
               }}
+              aria-label="Get a quote for web development and AI automation services"
             >
               Get a Quote
             </Link>
@@ -152,6 +154,7 @@ function MobileMenu({
                 fontFamily: 'system-ui, -apple-system, "Inter", sans-serif'
               }}
               onClick={() => setIsOpen(false)}
+              aria-label="Get a quote for web development and AI automation services"
             >
               Get a Quote
             </Link>

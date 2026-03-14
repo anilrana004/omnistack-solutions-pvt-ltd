@@ -2,21 +2,23 @@ import { NextRequest, NextResponse } from 'next/server';
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
 import { join } from 'path';
 import { logger } from '@/src/lib/logger';
+import { dbConnect, useMongoForFeedback } from '@/src/lib/db';
+import { Feedback } from '@/src/lib/models/Feedback';
 
-interface Feedback {
+interface FileFeedback {
   id: string;
   name: string;
-  role: string;
-  company: string;
+  email?: string;
+  role?: string;
+  company?: string;
   rating: number;
   message: string;
-  approved: boolean;
+  approved?: boolean;
   createdAt: string;
 }
 
 const DATA_FILE = join(process.cwd(), 'data', 'feedback.json');
 
-// Ensure data directory exists
 function ensureDataDir() {
   const dataDir = join(process.cwd(), 'data');
   if (!existsSync(dataDir)) {
@@ -24,44 +26,9 @@ function ensureDataDir() {
   }
 }
 
-// Read feedback from file
-function readFeedback(): Feedback[] {
+function readFeedbackFromFile(): FileFeedback[] {
   ensureDataDir();
-  if (!existsSync(DATA_FILE)) {
-    // Return default testimonials if file doesn't exist
-    return [
-      {
-        id: "1",
-        name: "Sarah Johnson",
-        role: "Founder & CEO",
-        company: "TechStart Inc.",
-        rating: 5,
-        message: "OmniStack Solutions transformed our business with their exceptional full-stack development. Their team delivered a scalable platform that exceeded our expectations.",
-        approved: true,
-        createdAt: new Date().toISOString(),
-      },
-      {
-        id: "2",
-        name: "Michael Chen",
-        role: "CTO",
-        company: "Digital Innovations",
-        rating: 5,
-        message: "The AI automation solutions they built have streamlined our operations significantly. Professional, responsive, and always ahead of schedule.",
-        approved: true,
-        createdAt: new Date().toISOString(),
-      },
-      {
-        id: "3",
-        name: "Emily Rodriguez",
-        role: "Marketing Director",
-        company: "GrowthCo",
-        rating: 5,
-        message: "Their PR and personal branding services helped establish our thought leadership. The strategic content and media placements were exactly what we needed.",
-        approved: true,
-        createdAt: new Date().toISOString(),
-      },
-    ];
-  }
+  if (!existsSync(DATA_FILE)) return [];
   try {
     const data = readFileSync(DATA_FILE, 'utf-8');
     return JSON.parse(data);
@@ -73,8 +40,7 @@ function readFeedback(): Feedback[] {
   }
 }
 
-// Write feedback to file
-function writeFeedback(feedback: Feedback[]): void {
+function writeFeedbackToFile(feedback: FileFeedback[]): void {
   ensureDataDir();
   try {
     writeFileSync(DATA_FILE, JSON.stringify(feedback, null, 2), 'utf-8');
@@ -86,16 +52,62 @@ function writeFeedback(feedback: Feedback[]): void {
   }
 }
 
-// GET - Fetch approved testimonials
-export async function GET() {
-  try {
-    const allFeedback = readFeedback();
-    const approvedFeedback = allFeedback
-      .filter((f) => f.approved === true)
-      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-      .slice(0, 6); // Limit to latest 6 for better display
+type FeedbackLike = {
+  _id?: unknown;
+  id?: string;
+  name: string;
+  email?: string;
+  role?: string;
+  company?: string;
+  rating: number;
+  message: string;
+  createdAt: Date | string;
+};
 
-    return NextResponse.json({ testimonials: approvedFeedback });
+function toPublicFeedback(item: FeedbackLike | FileFeedback) {
+  const id =
+    '_id' in item && typeof item._id === 'object' && item._id && 'toString' in item._id
+      ? (item._id as { toString(): string }).toString()
+      : (item as FileFeedback).id ?? '';
+  return {
+    id,
+    name: item.name,
+    email: item.email ?? '',
+    role: item.role ?? '',
+    company: item.company ?? '',
+    rating: item.rating,
+    message: item.message,
+    createdAt: typeof item.createdAt === 'string' ? item.createdAt : (item.createdAt as Date).toISOString(),
+  };
+}
+
+export async function GET(request: NextRequest) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const limitParam = searchParams.get('limit');
+    const limit = limitParam ? Math.min(Math.max(1, parseInt(limitParam, 10) || 6), 100) : 6;
+
+    if (useMongoForFeedback()) {
+      try {
+        await dbConnect();
+        const list = await Feedback.find()
+          .sort({ createdAt: -1 })
+          .limit(limit)
+          .lean();
+        const testimonials = list.map((doc) => toPublicFeedback(doc as unknown as FeedbackLike));
+        return NextResponse.json({ testimonials });
+      } catch {
+        // Fall back to file if MongoDB fails
+      }
+    }
+
+    const allFeedback = readFeedbackFromFile();
+    const approved = (allFeedback as FileFeedback[])
+      .filter((f) => f.approved !== false)
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+      .slice(0, limit);
+    const testimonials = approved.map((f) => toPublicFeedback(f));
+    return NextResponse.json({ testimonials });
   } catch (error) {
     logger.apiError('/api/feedback (GET)', error instanceof Error ? error : new Error(String(error)));
     return NextResponse.json(
@@ -105,50 +117,75 @@ export async function GET() {
   }
 }
 
-// POST - Submit new feedback
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { name, role, company, rating, message } = body;
+    const { name, email, role, company, rating, message } = body;
 
-    // Validation
-    if (!name || !role || !company || !rating || !message) {
+    if (!name || typeof name !== 'string' || !name.trim()) {
+      return NextResponse.json({ error: 'Name is required' }, { status: 400 });
+    }
+    if (!rating || rating < 1 || rating > 5) {
+      return NextResponse.json({ error: 'Rating must be between 1 and 5' }, { status: 400 });
+    }
+    if (!message || typeof message !== 'string' || !message.trim()) {
+      return NextResponse.json({ error: 'Message is required' }, { status: 400 });
+    }
+
+    if (useMongoForFeedback()) {
+      const emailVal = typeof email === 'string' ? email.trim() : '';
+      if (!emailVal) {
+        return NextResponse.json({ error: 'Email is required' }, { status: 400 });
+      }
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(emailVal)) {
+        return NextResponse.json({ error: 'Invalid email address' }, { status: 400 });
+      }
+
+      await dbConnect();
+      const doc = await Feedback.create({
+        name: name.trim(),
+        email: emailVal.toLowerCase(),
+        rating: Number(rating),
+        message: message.trim(),
+        role: typeof role === 'string' ? role.trim() : undefined,
+        company: typeof company === 'string' ? company.trim() : undefined,
+      });
+      const feedback = toPublicFeedback({
+        _id: doc._id,
+        name: doc.name,
+        email: doc.email,
+        role: doc.role,
+        company: doc.company,
+        rating: doc.rating,
+        message: doc.message,
+        createdAt: doc.createdAt,
+      });
       return NextResponse.json(
-        { error: 'All fields are required' },
-        { status: 400 }
+        { message: 'Thank you for your feedback!', success: true, feedback },
+        { status: 201 }
       );
     }
 
-    if (rating < 1 || rating > 5) {
-      return NextResponse.json(
-        { error: 'Rating must be between 1 and 5' },
-        { status: 400 }
-      );
-    }
-
-    // Create new feedback - auto-approve for instant display
-    const newFeedback: Feedback = {
+    const newFeedback: FileFeedback = {
       id: Date.now().toString(),
       name: name.trim(),
-      role: role.trim(),
-      company: company.trim(),
-      rating: parseInt(rating),
+      email: typeof email === 'string' ? email.trim() : undefined,
+      role: typeof role === 'string' ? role.trim() : undefined,
+      company: typeof company === 'string' ? company.trim() : undefined,
+      rating: Number(rating),
       message: message.trim(),
-      approved: true, // Auto-approve for instant display
+      approved: true,
       createdAt: new Date().toISOString(),
     };
-
-    // Save to file
-    const allFeedback = readFeedback();
+    const allFeedback = readFeedbackFromFile();
     allFeedback.push(newFeedback);
-    writeFeedback(allFeedback);
-
-    // Return the saved feedback object for instant UI update
+    writeFeedbackToFile(allFeedback);
     return NextResponse.json(
-      { 
-        message: 'Thank you for your feedback!', 
+      {
+        message: 'Thank you for your feedback!',
         success: true,
-        feedback: newFeedback 
+        feedback: toPublicFeedback(newFeedback),
       },
       { status: 201 }
     );

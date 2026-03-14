@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import WhatsAppButton from "@/components/WhatsAppButton";
+import WhatsAppButtonDeferred from "@/components/WhatsAppButtonDeferred";
 import { validateAndLog } from "@/src/lib/env-validation";
 
 const SITE_URL =
@@ -123,6 +123,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <link rel="preconnect" href="https://cdn.sanity.io" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://cdn.sanity.io" />
+        <link rel="preload" href="/hero/hero-illustration.png" as="image" />
+        <link rel="preload" href="/logo/omnistack-logo.svg.png" as="image" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
@@ -133,10 +137,14 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-screen flex flex-col">
-        <Navbar />
-        <main className="flex-grow">{children}</main>
+        <header role="banner">
+          <Navbar />
+        </header>
+        <main className="flex-grow" id="main-content" role="main" aria-label="Main content">
+          {children}
+        </main>
         <Footer />
-        <WhatsAppButton />
+        <WhatsAppButtonDeferred />
       </body>
     </html>
   );

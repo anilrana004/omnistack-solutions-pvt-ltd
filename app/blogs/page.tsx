@@ -15,12 +15,14 @@ export const metadata: Metadata = {
   title: "Blogs & News | OmniStack Solutions",
   description:
     "Updates, insights, and announcements from the OmniStack team. Tech, full stack development, AI, and industry trends.",
+  keywords: ["blog", "tech insights", "full stack development", "web development", "AI automation"],
   alternates: { canonical: `${SITE_URL}/blogs` },
   openGraph: {
     url: `${SITE_URL}/blogs`,
     title: "Blogs & News | OmniStack Solutions",
     description:
       "Updates, insights, and announcements from the OmniStack team. Tech, full stack development, AI, and industry trends.",
+    type: "website",
   },
   twitter: {
     card: "summary_large_image",
@@ -29,6 +31,20 @@ export const metadata: Metadata = {
       "Updates, insights, and announcements from the OmniStack team. Tech, full stack development, AI, and industry trends.",
   },
 };
+
+function BreadcrumbSchema() {
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: `${SITE_URL}/` },
+      { "@type": "ListItem", position: 2, name: "Blog", item: `${SITE_URL}/blogs` },
+    ],
+  };
+  return (
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
+  );
+}
 
 async function getSanityBlogs(): Promise<SanityBlogListItem[]> {
   try {
@@ -59,25 +75,26 @@ async function BlogsPageView() {
 
   if (!posts.length) {
     return (
-      <div className="pt-14 sm:pt-16 min-w-0 overflow-x-hidden">
+      <div className="pt-14 sm:pt-16 min-w-0 w-full overflow-x-hidden max-w-[100vw]">
+        <BreadcrumbSchema />
         <section
           className={[
-            "omni-bg-overlay py-12 sm:py-16 md:py-20 text-white",
+            "omni-bg-overlay py-10 sm:py-16 md:py-20 text-white px-[max(1rem,env(safe-area-inset-left))]",
             "bg-[url('/images/backgrounds/blogs-news-bg.jpg.jpg')] bg-cover bg-center bg-no-repeat",
           ].join(" ")}
         >
-          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 break-words">
+          <div className="relative z-10 max-w-7xl mx-auto text-center">
+            <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-3 sm:mb-6 break-words">
               Blogs & News
             </h1>
-            <p className="text-base sm:text-lg md:text-xl text-gray-300 max-w-3xl mx-auto px-1">
+            <p className="text-sm sm:text-lg md:text-xl text-gray-300 max-w-3xl mx-auto">
               Updates, insights, and announcements from the OmniStack team.
             </p>
           </div>
         </section>
 
-        <section className="py-12 sm:py-16 md:py-20 bg-gray-50">
-          <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        <section className="py-12 sm:py-16 md:py-20 bg-gray-50 px-[max(1rem,env(safe-area-inset-left))] pr-[max(1rem,env(safe-area-inset-right))]">
+          <div className="max-w-3xl mx-auto w-full min-w-0">
             <div className="rounded-xl sm:rounded-2xl border border-gray-200 bg-white p-6 sm:p-8 md:p-10 text-center shadow-sm">
               <h2 className="text-xl sm:text-2xl font-bold text-olive-900">
                 No posts yet
@@ -101,18 +118,20 @@ async function BlogsPageView() {
   }
 
   return (
-    <div className="pt-14 sm:pt-16 min-w-0 overflow-x-hidden">
+    <div className="pt-14 sm:pt-16 min-w-0 w-full overflow-x-hidden max-w-[100vw]">
+      <BreadcrumbSchema />
       <section
         className={[
-          "omni-bg-overlay py-12 sm:py-16 md:py-20 text-white",
+          "omni-bg-overlay py-10 sm:py-16 md:py-20 text-white",
           "bg-[url('/images/backgrounds/blogs-news-bg.jpg.jpg')] bg-cover bg-center bg-no-repeat",
+          "px-[max(1rem,env(safe-area-inset-left))]",
         ].join(" ")}
       >
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 break-words">
+        <div className="relative z-10 max-w-7xl mx-auto px-0 sm:px-6 lg:px-8 text-center">
+          <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-3 sm:mb-6 break-words">
             Blogs & News
           </h1>
-          <p className="text-base sm:text-lg md:text-xl text-gray-300 max-w-3xl mx-auto px-1">
+          <p className="text-sm sm:text-lg md:text-xl text-gray-300 max-w-3xl mx-auto">
             Updates, insights, and announcements from the OmniStack team.
           </p>
         </div>
@@ -120,12 +139,13 @@ async function BlogsPageView() {
 
       <section
         className={[
-          "omni-bg-overlay py-10 sm:py-14 md:py-20",
+          "omni-bg-overlay py-8 sm:py-14 md:py-20",
           "bg-[url('/images/backgrounds/blogs-news-bg.jpg.jpg')] bg-cover bg-center bg-no-repeat",
+          "px-[max(1rem,env(safe-area-inset-left))]",
         ].join(" ")}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+        <div className="max-w-7xl mx-auto w-full min-w-0 px-0 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 w-full min-w-0">
             {posts.map((post) => {
               return (
                 <BlogCard

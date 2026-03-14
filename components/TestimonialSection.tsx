@@ -1,31 +1,49 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Star, Quote, X } from "lucide-react";
 
 interface FeedbackItem {
   id: string;
   name: string;
+  email?: string;
   role: string;
   company: string;
   message: string;
   rating: number;
-  createdAt: Date;
+  createdAt: Date | string;
 }
 
 interface FeedbackFormData {
   name: string;
+  email: string;
   role: string;
   company: string;
   rating: number;
   message: string;
 }
 
+function mapApiToFeedback(item: { id: string; name: string; email?: string; role?: string; company?: string; message: string; rating: number; createdAt: string }): FeedbackItem {
+  return {
+    id: item.id,
+    name: item.name,
+    email: item.email,
+    role: item.role ?? '',
+    company: item.company ?? '',
+    message: item.message,
+    rating: item.rating,
+    createdAt: item.createdAt,
+  };
+}
+
 export default function TestimonialSection() {
   const [feedbacks, setFeedbacks] = useState<FeedbackItem[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState<FeedbackFormData>({
     name: "",
+    email: "",
     role: "",
     company: "",
     rating: 0,
@@ -35,6 +53,26 @@ export default function TestimonialSection() {
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [errors, setErrors] = useState<Partial<Record<keyof FeedbackFormData, string>>>({});
   const [thankYouMessage, setThankYouMessage] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    async function fetchTestimonials() {
+      try {
+        setLoadError(null);
+        const res = await fetch("/api/feedback?limit=3");
+        if (!res.ok) throw new Error("Failed to load testimonials");
+        const data = await res.json();
+        if (cancelled || !data.testimonials) return;
+        setFeedbacks((data.testimonials as any[]).map(mapApiToFeedback));
+      } catch (e) {
+        if (!cancelled) setLoadError(e instanceof Error ? e.message : "Could not load testimonials");
+      } finally {
+        if (!cancelled) setIsLoading(false);
+      }
+    }
+    fetchTestimonials();
+    return () => { cancelled = true; };
+  }, []);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -52,15 +90,15 @@ export default function TestimonialSection() {
 
   const validateForm = (): boolean => {
     const newErrors: Partial<Record<keyof FeedbackFormData, string>> = {};
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!formData.name.trim()) {
       newErrors.name = "Name is required";
     }
-    if (!formData.role.trim()) {
-      newErrors.role = "Role is required";
-    }
-    if (!formData.company.trim()) {
-      newErrors.company = "Company is required";
+    if (!formData.email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!emailRegex.test(formData.email.trim())) {
+      newErrors.email = "Please enter a valid email address";
     }
     if (!formData.rating || formData.rating < 1 || formData.rating > 5) {
       newErrors.rating = "Please select a rating";
@@ -73,7 +111,7 @@ export default function TestimonialSection() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!validateForm()) {
@@ -83,34 +121,51 @@ export default function TestimonialSection() {
     setIsSubmitting(true);
     setErrors({});
 
-    const newFeedback: FeedbackItem = {
-      id: Date.now().toString(),
-      name: formData.name.trim(),
-      role: formData.role.trim(),
-      company: formData.company.trim(),
-      rating: formData.rating,
-      message: formData.message.trim(),
-      createdAt: new Date(),
-    };
+    try {
+      const res = await fetch("/api/feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: formData.name.trim(),
+          email: formData.email.trim(),
+          role: formData.role.trim(),
+          company: formData.company.trim(),
+          rating: formData.rating,
+          message: formData.message.trim(),
+        }),
+      });
+      const data = await res.json();
 
-    setFeedbacks((prev) => [newFeedback, ...prev]);
+      if (!res.ok) {
+        setErrors({ message: data.error || "Failed to submit feedback" });
+        return;
+      }
 
-    setFormData({
-      name: "",
-      role: "",
-      company: "",
-      rating: 0,
-      message: "",
-    });
+      if (data.feedback) {
+        setFeedbacks((prev) => [mapApiToFeedback(data.feedback), ...prev]);
+      }
 
-    setSubmitSuccess(true);
-    setIsSubmitting(false);
-    setTimeout(() => {
-      setIsModalOpen(false);
-      setSubmitSuccess(false);
-      setThankYouMessage(true);
-      setTimeout(() => setThankYouMessage(false), 3000);
-    }, 500);
+      setFormData({
+        name: "",
+        email: "",
+        role: "",
+        company: "",
+        rating: 0,
+        message: "",
+      });
+
+      setSubmitSuccess(true);
+      setTimeout(() => {
+        setIsModalOpen(false);
+        setSubmitSuccess(false);
+        setThankYouMessage(true);
+        setTimeout(() => setThankYouMessage(false), 3000);
+      }, 500);
+    } catch {
+      setErrors({ message: "Network error. Please try again." });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleCloseModal = () => {
@@ -118,6 +173,7 @@ export default function TestimonialSection() {
       setIsModalOpen(false);
       setFormData({
         name: "",
+        email: "",
         role: "",
         company: "",
         rating: 0,
@@ -147,7 +203,16 @@ export default function TestimonialSection() {
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {feedbacks.length === 0 ? (
+            {isLoading ? (
+              <div className="col-span-full text-center py-12">
+                <p className="text-xl text-white/85">Loading testimonials...</p>
+              </div>
+            ) : loadError ? (
+              <div className="col-span-full text-center py-12">
+                <p className="text-xl text-white/85">{loadError}</p>
+                <p className="text-sm text-white/70 mt-2">You can still share your experience below.</p>
+              </div>
+            ) : feedbacks.length === 0 ? (
               <div className="col-span-full text-center py-12">
                 <p className="text-xl text-white/85">
                   No feedback yet. Be the first to share your experience.
@@ -299,6 +364,40 @@ export default function TestimonialSection() {
                 />
                 {errors.name && (
                   <p className="mt-1 text-xs text-red-500">{errors.name}</p>
+                )}
+              </div>
+
+              {/* Email */}
+              <div>
+                <label
+                  htmlFor="email"
+                  className="block text-sm text-gray-700 mb-1.5"
+                  style={{
+                    fontFamily: 'system-ui, -apple-system, "Inter", sans-serif',
+                    fontWeight: 400,
+                  }}
+                >
+                  Email <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  className={`w-full px-4 py-2.5 rounded-lg border text-sm ${
+                    errors.email
+                      ? "border-red-300"
+                      : "border-gray-200 focus:border-olive-500"
+                  } focus:outline-none focus:ring-1 focus:ring-olive-500 transition-colors`}
+                  style={{
+                    fontFamily: 'system-ui, -apple-system, "Inter", sans-serif',
+                    fontWeight: 400,
+                  }}
+                  placeholder="your@email.com"
+                />
+                {errors.email && (
+                  <p className="mt-1 text-xs text-red-500">{errors.email}</p>
                 )}
               </div>
 
@@ -456,6 +555,11 @@ export default function TestimonialSection() {
                     Thank you for your feedback!
                   </p>
                 </div>
+              )}
+
+              {/* Submit error (e.g. network or API) */}
+              {errors.message && (
+                <p className="text-sm text-red-600">{errors.message}</p>
               )}
 
               {/* Submit Button */}

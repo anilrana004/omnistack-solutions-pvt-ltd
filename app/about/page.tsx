@@ -1,4 +1,36 @@
+import type { Metadata } from "next";
 import { CheckCircle2, Lightbulb, Rocket, Headphones } from "lucide-react";
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/+$/, "") || "https://omnistack.co.in";
+
+export const metadata: Metadata = {
+  title: "About Us | Full Stack Development Company India",
+  description:
+    "OmniStack Solutions is a full-stack technology company in India. We build websites, mobile apps, AI tools, and cloud infrastructure. Learn about our process and values.",
+  keywords: ["about OmniStack", "full stack company India", "web development team", "software development process"],
+  alternates: { canonical: `${SITE_URL}/about` },
+  openGraph: {
+    url: `${SITE_URL}/about`,
+    title: "About Us | OmniStack Solutions",
+    description: "Full-stack technology company building websites, apps, AI, and cloud solutions. Discovery, design, development, and support.",
+    type: "website",
+  },
+  twitter: { card: "summary_large_image", title: "About Us | OmniStack Solutions", description: "Full-stack technology company building websites, apps, AI, and cloud solutions." },
+};
+
+function BreadcrumbSchema() {
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: `${SITE_URL}/` },
+      { "@type": "ListItem", position: 2, name: "About", item: `${SITE_URL}/about` },
+    ],
+  };
+  return (
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
+  );
+}
 
 const processSteps = [
   {
@@ -41,8 +73,10 @@ const coreValues = [
 export default function AboutPage() {
   return (
     <div className="pt-16">
+      <BreadcrumbSchema />
       {/* Hero Section */}
-      <section className="py-20 bg-gradient-to-br from-olive-900 to-olive-950 text-white">
+      <header>
+        <section className="py-20 bg-gradient-to-br from-olive-900 to-olive-950 text-white" aria-label="About us overview">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-5xl md:text-6xl font-bold mb-6">
             About OmniStack Solutions
@@ -52,10 +86,12 @@ export default function AboutPage() {
           </p>
         </div>
       </section>
+      </header>
 
       {/* About Content */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-white" aria-labelledby="about-content-heading">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 id="about-content-heading" className="sr-only">About OmniStack Solutions</h2>
           <div className="prose prose-lg max-w-none">
             <p className="text-gray-700 leading-relaxed mb-6">
               OmniStack Solutions is a full-stack technology company specializing
@@ -83,9 +119,9 @@ export default function AboutPage() {
       </section>
 
       {/* Our Process */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-20 bg-gray-50" aria-labelledby="our-process-heading">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-4xl font-bold text-center mb-4 text-olive-900">
+          <h2 id="our-process-heading" className="text-4xl font-bold text-center mb-4 text-olive-900">
             Our Process
           </h2>
           <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
@@ -114,9 +150,9 @@ export default function AboutPage() {
       </section>
 
       {/* Core Values */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-white" aria-labelledby="core-values-heading">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-4xl font-bold text-center mb-12 text-olive-900">
+          <h2 id="core-values-heading" className="text-4xl font-bold text-center mb-12 text-olive-900">
             Core Values
           </h2>
           <ul className="space-y-4">

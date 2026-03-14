@@ -108,11 +108,11 @@ export default function ServiceDetailModal({open, service, onClose}: Props) {
       >
         {/* Header (sticky, non-scroll) */}
         <div className="sticky top-0 z-10 bg-white/10 backdrop-blur flex items-start justify-between gap-4 px-6 py-5 border-b border-white/15">
-          <div>
-            <h2 id={titleId} className="text-2xl font-bold text-gray-50">
+          <div className="min-w-0 flex-1 pr-2">
+            <h2 id={titleId} className="text-xl font-bold text-gray-50 break-words">
               {service?.title}
             </h2>
-            <p className="mt-2 text-white/85 leading-relaxed">
+            <p className="mt-2 text-white/85 leading-relaxed break-words">
               {service?.fullDescription}
             </p>
           </div>
@@ -129,7 +129,7 @@ export default function ServiceDetailModal({open, service, onClose}: Props) {
 
         {/* Scrollable content (only this area scrolls)
             Add bottom padding so sticky footer never overlaps the last items. */}
-        <div className="px-6 py-6 pb-28 sm:pb-24 overflow-y-auto scroll-smooth pr-2 max-h-[60vh] md:max-h-[65vh] [scrollbar-width:thin] [scrollbar-color:rgba(255,255,255,0.25)_transparent]">
+        <div className="px-6 py-6 pb-28 sm:pb-24 overflow-y-auto overflow-x-hidden scroll-smooth pr-6 max-h-[60vh] md:max-h-[65vh] [scrollbar-width:thin] [scrollbar-color:rgba(255,255,255,0.25)_transparent]">
           <div className="space-y-8">
             <section>
               <h3 className="text-lg font-semibold text-gray-50 mb-3">
@@ -178,21 +178,21 @@ export default function ServiceDetailModal({open, service, onClose}: Props) {
         </div>
 
         {/* Footer / CTA (sticky, non-scroll) */}
-        <div className="sticky bottom-0 z-10 px-6 py-5 border-t border-white/15 bg-white/10 backdrop-blur">
-          <div className="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
-            <p className="text-sm text-white/75">
+        <div className="sticky bottom-0 z-10 px-4 sm:px-6 py-3 border-t border-white/15 bg-white/10 backdrop-blur">
+          <div className="flex flex-col sm:flex-row gap-2 sm:items-center sm:justify-between min-w-0">
+            <p className="text-xs sm:text-sm text-white/75 break-words min-w-0 pr-2">
               Share your goals — we’ll propose a clear plan, timeline, and next steps.
             </p>
-            <div className="flex gap-3">
+            <div className="flex gap-2 flex-shrink-0">
               <Link
                 href={`/contact?project=${encodeURIComponent(getProjectParam(service))}`}
-                className="btn-primary"
+                className="btn-primary inline-flex items-center justify-center px-4 py-2.5 rounded-lg text-sm font-semibold"
               >
                 {service?.ctaText || "Start Project"}
               </Link>
               <Link
                 href="/contact"
-                className="inline-flex items-center justify-center px-6 py-3 rounded-lg font-semibold text-white/90 bg-white/10 border border-white/25 transition-colors [@media(hover:hover)]:hover:bg-white/15"
+                className="inline-flex items-center justify-center px-4 py-2.5 rounded-lg text-sm font-semibold text-white/90 bg-white/10 border border-white/25 transition-colors [@media(hover:hover)]:hover:bg-white/15"
               >
                 Contact Us
               </Link>

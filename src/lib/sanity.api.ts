@@ -34,6 +34,7 @@ import {
   siteSettingsQuery,
   allBlogsQuery,
   blogBySlugQuery,
+  relatedBlogsQuery,
 } from './sanity.queries'
 
 // Error handling utilities
@@ -415,6 +416,22 @@ export async function getBlogBySlug(slug: string, preview = false): Promise<Sani
     10 * 60 * 1000,
     preview
   )
+}
+
+export async function getRelatedBlogs(
+  slug: string,
+  preview = false
+): Promise<Array<{ _id: string; title: string; slug: string; excerpt?: string; publishedAt: string }>> {
+  try {
+    const client = getClient(preview)
+    const list = await client.fetch<Array<{ _id: string; title: string; slug: string; excerpt?: string; publishedAt: string }>>(
+      relatedBlogsQuery,
+      { slug }
+    )
+    return Array.isArray(list) ? list : []
+  } catch {
+    return []
+  }
 }
 
 // Utility functions
