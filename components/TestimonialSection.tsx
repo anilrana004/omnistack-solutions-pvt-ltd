@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { Star, Quote, X } from "lucide-react";
+import { Quote, Star, X } from "lucide-react";
+import React, { useEffect, useState } from "react";
 
 interface FeedbackItem {
   id: string;
@@ -23,13 +23,22 @@ interface FeedbackFormData {
   message: string;
 }
 
-function mapApiToFeedback(item: { id: string; name: string; email?: string; role?: string; company?: string; message: string; rating: number; createdAt: string }): FeedbackItem {
+function mapApiToFeedback(item: {
+  id: string;
+  name: string;
+  email?: string;
+  role?: string;
+  company?: string;
+  message: string;
+  rating: number;
+  createdAt: string;
+}): FeedbackItem {
   return {
     id: item.id,
     name: item.name,
     email: item.email,
-    role: item.role ?? '',
-    company: item.company ?? '',
+    role: item.role ?? "",
+    company: item.company ?? "",
     message: item.message,
     rating: item.rating,
     createdAt: item.createdAt,
@@ -51,7 +60,9 @@ export default function TestimonialSection() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
-  const [errors, setErrors] = useState<Partial<Record<keyof FeedbackFormData, string>>>({});
+  const [errors, setErrors] = useState<
+    Partial<Record<keyof FeedbackFormData, string>>
+  >({});
   const [thankYouMessage, setThankYouMessage] = useState(false);
 
   useEffect(() => {
@@ -65,17 +76,24 @@ export default function TestimonialSection() {
         if (cancelled || !data.testimonials) return;
         setFeedbacks((data.testimonials as any[]).map(mapApiToFeedback));
       } catch (e) {
-        if (!cancelled) setLoadError(e instanceof Error ? e.message : "Could not load testimonials");
+        if (!cancelled)
+          setLoadError(
+            e instanceof Error ? e.message : "Could not load testimonials",
+          );
       } finally {
         if (!cancelled) setIsLoading(false);
       }
     }
     fetchTestimonials();
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >,
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -184,7 +202,6 @@ export default function TestimonialSection() {
     }
   };
 
-
   return (
     <>
       <section
@@ -210,7 +227,9 @@ export default function TestimonialSection() {
             ) : loadError ? (
               <div className="col-span-full text-center py-12">
                 <p className="text-xl text-white/85">{loadError}</p>
-                <p className="text-sm text-white/70 mt-2">You can still share your experience below.</p>
+                <p className="text-sm text-white/70 mt-2">
+                  You can still share your experience below.
+                </p>
               </div>
             ) : feedbacks.length === 0 ? (
               <div className="col-span-full text-center py-12">
@@ -230,7 +249,6 @@ export default function TestimonialSection() {
                   <div className="absolute top-4 right-4 opacity-10">
                     <Quote className="w-12 h-12 text-white" />
                   </div>
-
 
                   <div className="flex items-center mb-4">
                     {[...Array(5)].map((_, i) => {
@@ -276,7 +294,7 @@ export default function TestimonialSection() {
                 style={{
                   fontFamily: 'system-ui, -apple-system, "Inter", sans-serif',
                   fontWeight: 400,
-                  letterSpacing: '0.01em',
+                  letterSpacing: "0.01em",
                 }}
               >
                 Thank you for your feedback!
@@ -288,7 +306,7 @@ export default function TestimonialSection() {
                 style={{
                   fontFamily: 'system-ui, -apple-system, "Inter", sans-serif',
                   fontWeight: 400,
-                  letterSpacing: '0.01em',
+                  letterSpacing: "0.01em",
                 }}
               >
                 Are you a client? Share your experience{" "}
@@ -298,7 +316,6 @@ export default function TestimonialSection() {
           </div>
         </div>
       </section>
-
 
       {/* Feedback Modal */}
       {isModalOpen && (
@@ -317,7 +334,7 @@ export default function TestimonialSection() {
                 style={{
                   fontFamily: 'system-ui, -apple-system, "Inter", sans-serif',
                   fontWeight: 500,
-                  letterSpacing: '0.01em',
+                  letterSpacing: "0.01em",
                 }}
               >
                 Share Your Experience
@@ -408,7 +425,8 @@ export default function TestimonialSection() {
                     htmlFor="role"
                     className="block text-sm text-gray-700 mb-1.5"
                     style={{
-                      fontFamily: 'system-ui, -apple-system, "Inter", sans-serif',
+                      fontFamily:
+                        'system-ui, -apple-system, "Inter", sans-serif',
                       fontWeight: 400,
                     }}
                   >
@@ -426,7 +444,8 @@ export default function TestimonialSection() {
                         : "border-gray-200 focus:border-olive-500"
                     } focus:outline-none focus:ring-1 focus:ring-olive-500 transition-colors`}
                     style={{
-                      fontFamily: 'system-ui, -apple-system, "Inter", sans-serif',
+                      fontFamily:
+                        'system-ui, -apple-system, "Inter", sans-serif',
                       fontWeight: 400,
                     }}
                     placeholder="Your role"
@@ -440,7 +459,8 @@ export default function TestimonialSection() {
                     htmlFor="company"
                     className="block text-sm text-gray-700 mb-1.5"
                     style={{
-                      fontFamily: 'system-ui, -apple-system, "Inter", sans-serif',
+                      fontFamily:
+                        'system-ui, -apple-system, "Inter", sans-serif',
                       fontWeight: 400,
                     }}
                   >
@@ -458,13 +478,16 @@ export default function TestimonialSection() {
                         : "border-gray-200 focus:border-olive-500"
                     } focus:outline-none focus:ring-1 focus:ring-olive-500 transition-colors`}
                     style={{
-                      fontFamily: 'system-ui, -apple-system, "Inter", sans-serif',
+                      fontFamily:
+                        'system-ui, -apple-system, "Inter", sans-serif',
                       fontWeight: 400,
                     }}
                     placeholder="Company name"
                   />
                   {errors.company && (
-                    <p className="mt-1 text-xs text-red-500">{errors.company}</p>
+                    <p className="mt-1 text-xs text-red-500">
+                      {errors.company}
+                    </p>
                   )}
                 </div>
               </div>
@@ -548,7 +571,8 @@ export default function TestimonialSection() {
                   <p
                     className="text-sm text-green-700"
                     style={{
-                      fontFamily: 'system-ui, -apple-system, "Inter", sans-serif',
+                      fontFamily:
+                        'system-ui, -apple-system, "Inter", sans-serif',
                       fontWeight: 400,
                     }}
                   >
@@ -571,7 +595,7 @@ export default function TestimonialSection() {
                   style={{
                     fontFamily: 'system-ui, -apple-system, "Inter", sans-serif',
                     fontWeight: 500,
-                    letterSpacing: '0.01em',
+                    letterSpacing: "0.01em",
                   }}
                 >
                   {isSubmitting ? "Submitting..." : "Submit Feedback"}

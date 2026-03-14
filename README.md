@@ -4,6 +4,8 @@ A production-ready, fully responsive marketing website built with Next.js, TypeS
 
 OmniStack Solutions Pvt. Ltd. builds scalable websites, applications, AI systems, and cloud solutions for modern businesses. We focus on clean architecture, performance, and long-term growth.
 
+**Performance:** The site is optimized for fast loading—hero preloads, deferred non-critical UI (e.g. WhatsApp), dynamic imports for below-the-fold sections, AVIF/WebP images, long-lived cache headers, and tree-shaken dependencies (`lucide-react`, `@sanity/client`).
+
 ## Tech Stack
 
 - **Next.js 14** (App Router)
