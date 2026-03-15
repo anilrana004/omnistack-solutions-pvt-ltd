@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import type { Metadata } from "next";
 import {
   Megaphone,
   Target,
@@ -9,8 +10,25 @@ import {
   TrendingUp,
   Shield,
   CheckCircle2,
-  ArrowRight, 
+  ArrowRight,
 } from "lucide-react";
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/+$/, "") || "https://omnistack.co.in";
+
+export const metadata: Metadata = {
+  title: "PR & Personal Branding Services",
+  description:
+    "Personal brand strategy, content creation, social media management, PR, and reputation management. Grow your authority with OmniStack Solutions.",
+  keywords: ["PR services", "personal branding", "social media management", "content strategy", "reputation management"],
+  alternates: { canonical: `${SITE_URL}/services/pr` },
+  openGraph: {
+    url: `${SITE_URL}/services/pr`,
+    title: "PR & Personal Branding | OmniStack Solutions",
+    description: "Personal brand strategy, content, and social media management for founders and professionals.",
+    type: "website",
+  },
+  twitter: { card: "summary_large_image", title: "PR & Personal Branding | OmniStack Solutions" },
+};
 
 const prServices = [
   {

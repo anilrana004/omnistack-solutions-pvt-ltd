@@ -2,6 +2,7 @@ import type { MetadataRoute } from 'next'
 import { sanityClient } from '@/src/lib/sanity.client'
 import { allBlogsQuery } from '@/src/lib/sanity.queries'
 import type { SanityBlogListItem } from '@/src/lib/sanity.types'
+import { projects } from '@/components/ProjectsSection'
 
 const PROGRAMMATIC_PATHS = [
   '/hire-react-developers',
@@ -30,6 +31,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${baseUrl}/about`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
     { url: `${baseUrl}/contact`, lastModified: now, changeFrequency: 'monthly', priority: 0.9 },
     { url: `${baseUrl}/blogs`, lastModified: now, changeFrequency: 'weekly', priority: 0.9 },
+    { url: `${baseUrl}/services/pr`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
     ...PROGRAMMATIC_PATHS.map((path) => ({
       url: `${baseUrl}${path}`,
       lastModified: now,
@@ -47,6 +49,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.8,
     }))
 
-  return [...staticEntries, ...blogEntries]
+  const projectEntries = projects.map((p) => ({
+    url: `${baseUrl}/projects/${p.slug}`,
+    lastModified: now,
+    changeFrequency: 'monthly' as const,
+    priority: 0.8,
+  }))
+
+  return [...staticEntries, ...projectEntries, ...blogEntries]
 }
 

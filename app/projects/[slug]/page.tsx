@@ -1,14 +1,58 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import Image from "next/image";
+import type { Metadata } from "next";
 import { projects } from "@/components/ProjectsSection";
 import { caseStudies } from "@/data/caseStudies";
 import { getProjectImageAsset } from "@/data/imageAssets";
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/+$/, "") || "https://omnistack.co.in";
 
 export async function generateStaticParams() {
   return projects.map((project) => ({
     slug: project.slug,
   }));
+}
+
+export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+  const project = projects.find((p) => p.slug === params.slug);
+  const caseStudy = project ? caseStudies[params.slug] : null;
+  if (!project || !caseStudy) {
+    return { title: "Project | OmniStack Solutions" };
+  }
+  const title = `${project.name} | Case Study | OmniStack Solutions`;
+  const description =
+    caseStudy.summary.slice(0, 155) +
+    (caseStudy.summary.length > 155 ? "…" : "");
+  const url = `${SITE_URL}/projects/${params.slug}`;
+  return {
+    title: project.name,
+    description,
+    alternates: { canonical: url },
+    openGraph: {
+      title,
+      description,
+      url,
+      type: "article",
+      siteName: "OmniStack Solutions Pvt Ltd",
+    },
+    twitter: { card: "summary_large_image", title, description },
+  };
+}
+
+function BreadcrumbSchema({ slug, name }: { slug: string; name: string }) {
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: `${SITE_URL}/` },
+      { "@type": "ListItem", position: 2, name: "Projects", item: `${SITE_URL}/projects` },
+      { "@type": "ListItem", position: 3, name, item: `${SITE_URL}/projects/${slug}` },
+    ],
+  };
+  return (
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
+  );
 }
 
 export default function CaseStudyPage({ params }: { params: { slug: string } }) {
@@ -42,6 +86,7 @@ export default function CaseStudyPage({ params }: { params: { slug: string } }) 
 
   return (
     <div className="pt-16">
+      <BreadcrumbSchema slug={params.slug} name={project.name} />
       {/* Hero Section */}
       <section className="py-24 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
