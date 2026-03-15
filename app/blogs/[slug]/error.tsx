@@ -1,12 +1,13 @@
 "use client";
 
 export default function BlogDetailError({
-  error: _error,
+  error,
   reset,
 }: {
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  void error; // Required by Next.js error boundary; not displayed in UI
   return (
     <div className="pt-14 sm:pt-16 min-w-0 w-full overflow-x-hidden max-w-[100vw]">
       <section className="min-h-screen w-full bg-white py-8 sm:py-10 md:py-14 px-4 sm:px-6 lg:px-10">

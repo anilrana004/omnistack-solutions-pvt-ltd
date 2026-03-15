@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
 import { join } from 'path';
 import { logger } from '@/src/lib/logger';
-import { dbConnect, useMongoForFeedback } from '@/src/lib/db';
+import { dbConnect, isMongoFeedbackEnabled } from '@/src/lib/db';
 import { Feedback } from '@/src/lib/models/Feedback';
 
 interface FileFeedback {
@@ -87,7 +87,7 @@ export async function GET(request: NextRequest) {
     const limitParam = searchParams.get('limit');
     const limit = limitParam ? Math.min(Math.max(1, parseInt(limitParam, 10) || 6), 100) : 6;
 
-    if (useMongoForFeedback()) {
+    if (isMongoFeedbackEnabled()) {
       try {
         await dbConnect();
         const list = await Feedback.find()
@@ -132,7 +132,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Message is required' }, { status: 400 });
     }
 
-    if (useMongoForFeedback()) {
+    if (isMongoFeedbackEnabled()) {
       const emailVal = typeof email === 'string' ? email.trim() : '';
       if (!emailVal) {
         return NextResponse.json({ error: 'Email is required' }, { status: 400 });

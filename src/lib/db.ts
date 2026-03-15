@@ -39,6 +39,6 @@ export function isMongoConfigured(): boolean {
 }
 
 /** Use MongoDB for feedback only when explicitly enabled (default: file storage). */
-export function useMongoForFeedback(): boolean {
+export function isMongoFeedbackEnabled(): boolean {
   return Boolean(MONGODB_URI?.length && process.env.USE_MONGODB_FEEDBACK === 'true');
 }

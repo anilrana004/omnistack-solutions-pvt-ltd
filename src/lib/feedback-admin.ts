@@ -1,6 +1,6 @@
 import { readFileSync, existsSync, mkdirSync } from "fs";
 import { join } from "path";
-import { dbConnect, useMongoForFeedback } from "@/src/lib/db";
+import { dbConnect, isMongoFeedbackEnabled } from "@/src/lib/db";
 import { Feedback } from "@/src/lib/models/Feedback";
 
 const DATA_FILE = join(process.cwd(), "data", "feedback.json");
@@ -52,7 +52,7 @@ function readAllFromFile(): AdminFeedbackItem[] {
 }
 
 export async function getAdminFeedback(): Promise<AdminFeedbackItem[]> {
-  if (useMongoForFeedback()) {
+  if (isMongoFeedbackEnabled()) {
     try {
       await dbConnect();
       const list = await Feedback.find().sort({ createdAt: -1 }).lean();

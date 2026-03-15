@@ -78,6 +78,7 @@ export async function POST(req: NextRequest) {
 }
 
 // Disable preview mode
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function DELETE(_req: NextRequest) {
   try {
     const response = NextResponse.json({ success: true, preview: false })
