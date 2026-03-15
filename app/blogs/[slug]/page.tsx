@@ -207,19 +207,19 @@ export default async function BlogDetailPage({
 
               {/* Related posts */}
               {relatedPosts.length > 0 ? (
-                <div className="mt-10 sm:mt-12 pt-8 border-t border-gray-200">
+                <div className="mt-10 sm:mt-12 pt-8 border-t border-gray-200 w-full min-w-0">
                   <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-4">Related posts</h2>
-                  <ul className="space-y-0">
+                  <ul className="space-y-6 sm:space-y-4 list-none pl-0">
                     {relatedPosts.map((r) => (
-                      <li key={r._id}>
+                      <li key={r._id} className="border-b border-gray-100 pb-6 sm:pb-4 last:border-0 last:pb-0 last:sm:pb-0">
                         <Link
                           href={`/blogs/${r.slug}`}
-                          className="block py-3 sm:py-2 text-olive-700 hover:underline font-medium break-words active:bg-gray-100 rounded min-h-[44px] sm:min-h-0 flex flex-col justify-center"
+                          className="block py-2 sm:py-1 text-olive-700 hover:underline font-medium break-words active:bg-gray-100 rounded min-h-[44px] sm:min-h-0 flex flex-col justify-center"
                         >
                           {r.title}
                         </Link>
                         {r.excerpt ? (
-                          <p className="text-sm text-gray-600 mt-0 sm:mt-1 line-clamp-2 break-words pb-2 sm:pb-0">{r.excerpt}</p>
+                          <p className="text-sm text-gray-600 mt-1 sm:mt-1 line-clamp-2 sm:line-clamp-2 break-words">{r.excerpt}</p>
                         ) : null}
                       </li>
                     ))}
